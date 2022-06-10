@@ -12,3 +12,8 @@ What we have so far in this project:
 
 To install the requirements run this in terminal:
 `source init.sh`
+
+
+# google docs:
+
+https://docs.google.com/document/d/12WIlLMl_l3vX2dv1bb3ZnQXg9orOfPYFRbv1ARFO-7A/edit
