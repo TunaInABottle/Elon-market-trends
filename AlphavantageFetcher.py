@@ -1,5 +1,4 @@
 import logging
-from MarketType import MarketType
 from Fetcher import Fetcher
 import requests
 import json
@@ -30,20 +29,11 @@ if __name__ == "__main__":
         alphavantage_key = f.read()
 
 
-    fetcherIBM = AlphavantageFetcher(alphavantage_key, "", "TIME_SERIES", "IBM")
-    print( fetcherIBM.fetch() )
+    #fetcherIBM = AlphavantageFetcher(alphavantage_key, "", "TIME_SERIES", "IBM")
+    #print( fetcherIBM.fetch() )
 
-    print( "---" )
+    #print( "---" )
 
     fetcherBitcoin = AlphavantageFetcher(alphavantage_key, "", "CRYPTO", "BTC")
     print( fetcherBitcoin.fetch() )
 
-
-### BITCOIN
-
-# replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-#url = 'https://www.alphavantage.co/query?function=CRYPTO_INTRADAY&symbol=BTC&market=USD&interval=5min&outputsize=full&apikey=' + alphavantage_key
-#r = requests.get(url)
-#data = r.json()
-
-#print(data)
