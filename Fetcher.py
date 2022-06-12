@@ -6,7 +6,7 @@ import json
 ### @abstractclass meaning https://www.geeksforgeeks.org/classmethod-in-python/
 
 class Fetcher(ABC):
-    def __init__(self, api_key, url) -> None:
+    def __init__(self, api_key: str, url: str) -> None:
         self._api_key = api_key
         self._url = url
 
