@@ -29,7 +29,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
                 if key == "api_key": #no interest in the API key
                     continue
 
-                fetch_log.info(val)
+                fetch_log.debug(val)
                 api_req_type = val["url_name"]
 
                 for market in val["markets"]: #iterate list of markets
