@@ -22,8 +22,8 @@ class AlphavantageFetcherCluster(FetcherCluster):
 
 
     @classmethod
-    def from_dict(cls, api_key: str, fetcher_dict: dict): # -> AlphavantageFetcherCluster:
-            cluster = cls(api_key)
+    def from_dict(cls, fetcher_dict: dict): # -> AlphavantageFetcherCluster:
+            cluster = cls(fetcher_dict["api_key"])
 
             for key, val in fetcher_dict.items():
                 if key == "api_key": #no interest in the API key

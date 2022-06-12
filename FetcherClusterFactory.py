@@ -30,4 +30,4 @@ class FetcherClusterFactory():
             fetch_log.error(f"cluster_fetcher_factory: {main_source} is not in the list of sources that can be fetched")
             raise KeyError
 
-        return webSources[main_source].from_dict("API_KEY", fetch_pools[main_source])
+        return webSources[main_source].from_dict(fetch_pools[main_source])
