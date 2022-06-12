@@ -18,8 +18,8 @@ markets_of_interest = {
 }
 
 
-for url_src, markets_info in markets_of_interest.items():
-    print(url_src)
+#for url_src, markets_info in markets_of_interest.items():
+#    print(url_src)
 
 
 
@@ -34,3 +34,8 @@ def cluster_fetcher_factory(main_source: str, sub_sources: dict) -> FetcherClust
         raise Exception(f"cluster_fetcher_factory: {main_source} is not in the list")
 
     return webSources[main_source](sub_sources)
+
+
+
+
+cluster_fetcher_factory("AlphaVantage", markets_of_interest["Alphavantage"])
