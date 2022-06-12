@@ -1,3 +1,8 @@
 venv
 .env
 secretfile.py
+stockkey.txt
+digital_currency_list.csv
+__pycache__
+log
+.mypy_cache
