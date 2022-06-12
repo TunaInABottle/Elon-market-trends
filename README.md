@@ -20,6 +20,20 @@ To install the requirements run this in terminal:
 
 (put quick tutorial here how to set up our kafka environment so that it can be replicated)
 
+### Create a Twitter Developer Account
+
+Once you have your twitter API account, create a file `secretfile.py` and put your keys in there like so:
+(replace 'your key' with your keys)
+
+```python
+import os
+os.environ['API_KEY'] = 'your key'
+os.environ['API_KEY_SECRET'] = 'your key'
+os.environ['BEARER_TOKEN'] = 'your key
+os.environ['ACCESS_TOKEN'] = 'your key'
+os.environ['ACCESS_TOKEN_SECRET'] = 'your key'
+```
+
 ### Run the code
 
 To run the code for testing, open the folder in VS Code, open a split Terminal and first run the consumer.py, then the producer.py file in the other window. You should see the producer producing messages (containing twitter Info) and the consumer receiving it.
