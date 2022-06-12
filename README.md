@@ -1,6 +1,6 @@
 # Elon-market-trends
 
-What we have so far in this project:
+### What we have so far in this project:
 
 - Setup of kafka using docker
 - kafka consumer + kafka producer
@@ -10,12 +10,21 @@ What we have so far in this project:
 - getting Elon Musk Twitter Data
 - sending each tweet seperately to kafka
 
-### Setting up the virtual environment:
+## How to Run:
 
+### Setting up the virtual environment
 To install the requirements run this in terminal:
 `source init.sh`
 
+### Setting up Kafka with docker
 
-# google docs:
+(put quick tutorial here how to set up our kafka environment so that it can be replicated)
+
+### Run the code
+
+To run the code for testing, open the folder in VS Code, open a split Terminal and first run the consumer.py, then the producer.py file in the other window. You should see the producer producing messages (containing twitter Info) and the consumer receiving it.
+
+
+## google docs:
 
 https://docs.google.com/document/d/12WIlLMl_l3vX2dv1bb3ZnQXg9orOfPYFRbv1ARFO-7A/edit
