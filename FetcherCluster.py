@@ -1,10 +1,14 @@
 from abc import ABC, abstractmethod
+import json
 
 class FetcherClusters(ABC):
-    def __init__(self, api_key, url) -> None:
-        self._api_key = api_key
-        self._url = url
+    def __init__(self) -> None:
+        self._fetcher_list = {}
 
     @abstractmethod
-    def fetch(self) -> json:
+    def fetch_all(self) -> json:
+        pass
+
+    @abstractmethod
+    def add(self) -> None:
         pass
