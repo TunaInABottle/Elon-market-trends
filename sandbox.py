@@ -1,4 +1,6 @@
 from AlphavantageFetcher import AlphavantageFetcher
+from FetcherCluster import FetcherCluster
+from AlphavantageFetcherCluster import AlphavantageFetcherCluster
 
 
 markets_of_interest = {
@@ -24,8 +26,8 @@ for url_src, markets_info in markets_of_interest.items():
 def cluster_fetcher_factory(main_source: str, sub_sources: dict) -> FetcherCluster: # @TODO Make a factory of clusters of fetchers, take as parameter the above dictionary and its key
 
     webSources = {
-        "AlphaVantage": AlphavantageFetcherCluster,
-        "Twitter": TwitterFetcherCluster
+        "AlphaVantage": AlphavantageFetcherCluster#,
+        #"Twitter": TwitterFetcherCluster
     }
 
     if main_source not in webSources: # @TODO does this check works?
