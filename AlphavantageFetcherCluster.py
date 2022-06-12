@@ -1,20 +1,41 @@
+from AlphavantageFetcher import AlphavantageFetcher
 from FetcherCluster import FetcherCluster
 import json
 
 from setup_logger import fetch_log
 
 
-
-
 class AlphavantageFetcherCluster(FetcherCluster):
+    """
+    Cluster of web fetchers from AlphaVantage API
+    """
+
     def __init__(self, api_key: str) -> None:
-        self._fetcher_list = {}
+        """
+        Args:
+            api_key (str): the API key for AlphaVantage
+
+        """
+        self._fetcher_dict = {}
         self._api_key = api_key
-        fetch_log.info("AlphavantageFetcherCluster istantiated")
+        fetch_log.info("istantiated")
 
 
     @classmethod
-    def from_dict(cls, api_key: str, fetcher_init_dict: dict): # -> FetcherCluster:
+    def from_dict(cls, api_key: str, fetcher_dict: dict): # -> AlphavantageFetcherCluster:
+            cluster = cls(api_key)
+
+            for key, val in fetcher_dict.items():
+                if key == "api_key": #no interest in the API key
+                    continue
+
+                fetch_log.info(val)
+                api_req_type = val["url_name"]
+
+                for market in val["markets"]: #iterate list of markets
+                    cluster.add( api_req_type, market )
+
+
             #cluster = cls(api_key)
             # add each fetcher into cluster
             #return cluster
@@ -25,5 +46,8 @@ class AlphavantageFetcherCluster(FetcherCluster):
         pass
 
 
-    def add(self) -> None:
-        pass
+    def add(self, market_type: str, market: str) -> None:
+        if market_type not in self._fetcher_dict:
+            self._fetcher_dict[market_type] = {}
+            
+        self._fetcher_dict[market_type][market] = AlphavantageFetcher(self._api_key, market_type, market)
