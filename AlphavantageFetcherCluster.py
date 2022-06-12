@@ -1,17 +1,7 @@
 from FetcherCluster import FetcherCluster
 import json
 
-#############
-
-import logging, logging.config, yaml
-
-with open('./config/logging.yaml', 'r') as f:
-    config = yaml.safe_load(f.read())
-    logging.config.dictConfig(config)
-
-logger = logging.getLogger("fetchersLogger")
-
-#############
+from setup_logger import fetch_log
 
 
 
@@ -20,7 +10,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
     def __init__(self, api_key: str) -> None:
         self._fetcher_list = {}
         self._api_key = api_key
-        logger.info("AlphavantageFetcherCluster istantiated")
+        fetch_log.info("AlphavantageFetcherCluster istantiated")
 
 
     @classmethod
