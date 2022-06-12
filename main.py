@@ -22,6 +22,3 @@ markets_of_interest["AlphaVantage"]["api_key"] = alphavantage_key
 
 
 FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
-
-
-print(markets_of_interest["AlphaVantage"]["api_key"])

@@ -3,3 +3,4 @@ venv
 stockkey.txt
 digital_currency_list.csv
 __pycache__
+log

@@ -4,10 +4,6 @@ import requests
 import json
 
 
-FORMAT = '%(asctime)s %(clientip)-15s %(user)-8s %(message)s'
-logging.basicConfig(format=FORMAT, level=logging.INFO)
-logger = logging.getLogger('ph')
-
 
 class AlphavantageFetcher(Fetcher):
     def __init__(self, api_key: str, url: str, type: str, market: str) -> None:
