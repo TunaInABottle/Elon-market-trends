@@ -22,3 +22,4 @@ markets_of_interest["AlphaVantage"]["api_key"] = alphavantage_key
 
 
 FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
+FetcherClusterFactory.create("AlphaVanage", markets_of_interest)

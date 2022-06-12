@@ -4,9 +4,9 @@ version: 1
 
 formatters:
   standard:
-      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    format: "%(asctime)s | %(name)s:%(levelname)s | %(module)s:%(funcName)s | %(message)s"
   simple:
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format: '%(asctime)s | %(name)s:%(levelname)s | %(module)s:%(funcName)s | %(message)s'
 
 
 
@@ -34,7 +34,7 @@ loggers:
     propagate: no
   fetchersLogger:
     lefet: DEBUG
-    handlers: [console, info_handler]
+    handlers: [info_handler]
     propagate: no
 root:
   level: DEBUG
