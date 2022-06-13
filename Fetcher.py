@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 import json
+import typing
+
+T = typing.TypeVar('T', bound='json')
 
 
 ### examples of abstract classhttps://www.pythontutorial.net/python-oop/python-abstract-class/
@@ -10,7 +13,7 @@ class Fetcher(ABC):
     #    self._api_key = api_key
 
     @abstractmethod
-    def fetch(self) -> json:
+    def fetch(self) -> T:
         pass
 
     """"
