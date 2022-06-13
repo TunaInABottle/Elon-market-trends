@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-import json
-
+from typing import Dict, Type
 from Fetcher import Fetcher
+
 
 
 
@@ -10,7 +10,7 @@ class FetcherCluster(ABC):
     Represent a generic cluster of web fetchers that pool from the same source.
     """
     def __init__(self, api_key: str) -> None:
-        self._fetcher_list = {}
+        self._fetcher_list: Dict[str, Type[Fetcher]] = {}
         self._api_key = api_key
 
 
@@ -29,9 +29,9 @@ class FetcherCluster(ABC):
         pass
 
     @abstractmethod
-    def fetch_all(self) -> json:
+    def fetch_all(self) -> str:
         pass
 
     @abstractmethod
-    def add(self, fetcher: Fetcher) -> None:
+    def add(self, fetcher: Type[Fetcher]) -> None:
         pass

@@ -14,9 +14,12 @@ class AlphavantageFetcher(Fetcher):
         self._market = market
         fetch_log.debug(f"istantiated: {type} - {market}")
 
-    def fetch(self) -> json:
+    def fetch(self) -> str: #@TODO should _type be more robust?
         r = requests.get( 'https://www.alphavantage.co/query?function=' + self._type + '_INTRADAY&symbol=' + self._market + '&market=USD&interval=5min&outputsize=full&apikey=' + self._api_key )
         return r.json()
+
+    def get_characteristics(self) -> str:
+        return f"{self._type} {self._market}"
 
 
 ###############

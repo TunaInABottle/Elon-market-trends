@@ -1,8 +1,7 @@
 from AlphavantageFetcher import AlphavantageFetcher
 from FetcherCluster import FetcherCluster
-import json
-
 from setup_logger import fetch_log
+from typing import Dict
 
 
 class AlphavantageFetcherCluster(FetcherCluster):
@@ -15,7 +14,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
         Args:
             api_key (str): the API key for AlphaVantage.
         """
-        self._fetcher_dict = {}
+        self._fetcher_dict: Dict[str, AlphavantageFetcher] = {}
         self._api_key = api_key
         fetch_log.debug("istantiated")
 
@@ -32,12 +31,12 @@ class AlphavantageFetcherCluster(FetcherCluster):
             api_req_type = val["url_name"]
 
             for market in val["markets"]: #iterate list of markets
-                new_fetcher = AlphavantageFetcher( self._api_key, api_req_type, market) #TODO self is not defined?!
-                cluster.add( new_fetcher, api_req_type, market )
+                new_fetcher = AlphavantageFetcher( cls._api_key, api_req_type, market) #TODO self is not defined?!
+                cluster.add( new_fetcher )
 
 
 
-    def fetch_all(self) -> json:
+    def fetch_all(self) -> str:
         pass
 
 
@@ -47,5 +46,6 @@ class AlphavantageFetcherCluster(FetcherCluster):
     #        
     #    self._fetcher_dict[market_type][market] = fetcher
 
+
     def add(self, fetcher: AlphavantageFetcher) -> None:
-        pass
+        self._fetcher_dict[fetcher.get_characteristics()] = fetcher
