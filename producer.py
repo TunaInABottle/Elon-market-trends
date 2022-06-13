@@ -17,25 +17,16 @@ producer = KafkaProducer(
     value_serializer=serializer
 )
 
+twitterFetcher = twitter_data.TwitterFetcher()
+given_id = 44196397 #Elon Musk
+
 if __name__ == '__main__':
     # Infinite loop - runs until you kill the program
-    #print(twitter_data.get_twitter_data())
-    for tweet in twitter_data.get_twitter_data():
+    
+    for tweet in twitterFetcher.get_twitter_data(given_id):
         tweet_message = tweet
         print(f'Producing message @ {datetime.now()} | Message = {str(tweet_message)}')
         producer.send('pizza', tweet_message)
         # Sleep for 3 seconds
         time.sleep(3)
 
-    # while True:
-    #     # Generate a message
-    #     dummy_message = generate_message()
-    #     #dummy_message = {'user_id': 1, 'recipient_id': 2, 'message': 'Hello World!'}
-        
-    #     # Send it to our 'brezel' topic
-    #     print(f'Producing message @ {datetime.now()} | Message = {str(dummy_message)}')
-    #     producer.send('pizza', dummy_message)
-        
-    #     # Sleep for a random number of seconds
-    #     time_to_sleep = random.randint(1, 11)
-    #     time.sleep(time_to_sleep)

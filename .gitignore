@@ -7,3 +7,4 @@ __pycache__
 log
 .mypy_cache
 config/AlphaVantageKey.txt
+twitter_data_old.py
