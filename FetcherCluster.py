@@ -6,6 +6,9 @@ from Fetcher import Fetcher
 
 
 class FetcherCluster(ABC):
+    """
+    Represent a generic cluster of web fetchers that pool from the same source.
+    """
     def __init__(self, api_key: str) -> None:
         self._fetcher_list = {}
         self._api_key = api_key
@@ -18,11 +21,12 @@ class FetcherCluster(ABC):
 
     @classmethod
     @abstractmethod
-    def from_dict(cls, api_key: str, fetcher_init_dict: dict): # -> FetcherCluster:
-            #cluster = cls(api_key)
-            # add each fetcher into cluster
-            #return cluster
-            pass
+    def from_dict(cls, fetcher_dict: dict) -> None:
+            
+        """
+        Istantiate class from a dictionary
+        """
+        pass
 
     @abstractmethod
     def fetch_all(self) -> json:
@@ -31,6 +35,3 @@ class FetcherCluster(ABC):
     @abstractmethod
     def add(self, fetcher: Fetcher) -> None:
         pass
-
-    #def fetch(self, source_name: str):
-    #    pass

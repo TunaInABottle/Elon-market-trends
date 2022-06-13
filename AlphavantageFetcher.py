@@ -11,7 +11,7 @@ class AlphavantageFetcher(Fetcher):
         super().__init__(api_key)
         self._type = type
         self._market = market
-        fetch_log.info(f"istantiated: {type} - {market}")
+        fetch_log.debug(f"istantiated: {type} - {market}")
 
     def fetch(self) -> json:
         r = requests.get( 'https://www.alphavantage.co/query?function=' + self._type + '_INTRADAY&symbol=' + self._market + '&market=USD&interval=5min&outputsize=full&apikey=' + self._api_key )
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         alphavantage_key = f.read()
 
 
-    #fetcherIBM = AlphavantageFetcher(alphavantage_key, "", "TIME_SERIES", "IBM")
+    #fetcherIBM = AlphavantageFetcher(alphavantage_key, "TIME_SERIES", "IBM")
     #print( fetcherIBM.fetch() )
 
     #print( "---" )
