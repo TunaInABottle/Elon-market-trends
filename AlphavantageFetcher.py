@@ -8,7 +8,8 @@ from setup_logger import fetch_log
 
 class AlphavantageFetcher(Fetcher):
     def __init__(self, api_key: str, type: str, market: str) -> None:
-        super().__init__(api_key)
+        super().__init__()
+        self._api_key = api_key
         self._type = type
         self._market = market
         fetch_log.debug(f"istantiated: {type} - {market}")
@@ -23,7 +24,7 @@ class AlphavantageFetcher(Fetcher):
 
 if __name__ == "__main__":
 
-    with open('stockkey.txt') as f:
+    with open('./config/AlphaVantageKey.txt') as f:
         alphavantage_key = f.read()
 
 

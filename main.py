@@ -3,7 +3,7 @@ from setup_logger import fetch_log
 
 fetch_log.info("New execution launched!")
 
-with open('stockkey.txt') as f:
+with open('./config/AlphaVantageKey.txt') as f:
     alphavantage_key = f.read()
 
 markets_of_interest = {
