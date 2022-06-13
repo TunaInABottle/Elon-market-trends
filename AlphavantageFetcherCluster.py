@@ -31,7 +31,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
             api_req_type = val["url_name"]
 
             for market in val["markets"]: #iterate list of markets
-                new_fetcher = AlphavantageFetcher( cls._api_key, api_req_type, market) #TODO self is not defined?!
+                new_fetcher = AlphavantageFetcher( fetcher_dict["api_key"], api_req_type, market)
                 cluster.add( new_fetcher )
 
 
