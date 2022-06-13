@@ -2,12 +2,12 @@
 
 #run with "source init.sh"
 
-alias activate=". .env/bin/activate"
+alias activate=". venv/bin/activate"
 
-if [[ ! -d .env ]]
+if [[ ! -d venv ]]
 then
     echo "wha hav y done!?"
-    python3 -m venv ./.env
+    python3 -m venv ./venv
 fi
 
 # activate venv
