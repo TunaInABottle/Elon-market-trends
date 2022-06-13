@@ -32,7 +32,8 @@ class AlphavantageFetcherCluster(FetcherCluster):
             api_req_type = val["url_name"]
 
             for market in val["markets"]: #iterate list of markets
-                cluster.add( api_req_type, market )
+                new_fetcher = AlphavantageFetcher( self._api_key, api_req_type, market) #TODO self is not defined?!
+                cluster.add( new_fetcher, api_req_type, market )
 
 
 
@@ -40,8 +41,11 @@ class AlphavantageFetcherCluster(FetcherCluster):
         pass
 
 
-    def add(self, market_type: str, market: str) -> None:
-        if market_type not in self._fetcher_dict:
-            self._fetcher_dict[market_type] = {}
-            
-        self._fetcher_dict[market_type][market] = AlphavantageFetcher(self._api_key, market_type, market)
+    #def add(self, fetcher: AlphavantageFetcher, market_type: str, market: str) -> None:
+    #    if market_type not in self._fetcher_dict:
+    #        self._fetcher_dict[market_type] = {}
+    #        
+    #    self._fetcher_dict[market_type][market] = fetcher
+
+    def add(self, fetcher: AlphavantageFetcher) -> None:
+        pass
