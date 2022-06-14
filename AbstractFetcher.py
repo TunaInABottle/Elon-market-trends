@@ -1,7 +1,40 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Type
-from Fetcher import Fetcher
 from typing import TypeVar
+
+### examples of abstract classhttps://www.pythontutorial.net/python-oop/python-abstract-class/
+### @abstractclass meaning https://www.geeksforgeeks.org/classmethod-in-python/
+
+class Fetcher(ABC):
+    @abstractmethod
+    def fetch(self) -> str:
+        """ Obtain information.
+
+        Returns:
+        The information the fetcher is requested to fetch.
+        """
+        pass
+
+    """"
+
+    @property # says that the next function has to be read as a property 
+    @abstractmethod
+    def _url():
+        raise NotImplementedError
+
+    
+    @property
+    @abstractmethod
+    def _api_key():
+        raise NotImplementedError
+    
+    def print_constant(self):
+        print(type(self)._url)
+    """
+
+
+
+########################
 
 
 T = TypeVar("T", bound="FetcherCluster")

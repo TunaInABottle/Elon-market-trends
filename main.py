@@ -1,6 +1,5 @@
-from AlphavantageFetcher import AlphavantageFetcher
 from FetcherClusterFactory import FetcherClusterFactory
-from AlphavantageFetcherCluster import AlphavantageFetcherCluster
+from AlphavantageAPI import AlphavantageFetcherCluster
 from setup_logger import fetch_log
 
 fetch_log.info("New execution launched!")
