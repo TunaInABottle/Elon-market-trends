@@ -1,33 +1,30 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Type
-from AlphavantageFetcher import AlphavantageFetcher
-from Fetcher import Fetcher
+from typing import Generic, Type, TypeVar
 
 
-
-
-class supper(ABC):
-
-
+class Fetcher(ABC):
     @abstractmethod
-    def add(self, fetcher: Type[Fetcher]) -> None:
+    def ara(self):
+        pass
+
+class FetcherCluster(ABC):
+    @abstractmethod
+    def fetch_all(self, fec: Type[Fetcher]):
+        pass
+
+#############
+
+class AlphaFetcher(Fetcher):
+    def ara(self):
+        pass
+
+class AlphaFetcherCluster(FetcherCluster):
+    def fetch_all(self, fec: AlphaFetcher):
         pass
 
 
+r = AlphaFetcherCluster()
 
-
-class subclass(supper):
-    def __init__(self) -> None:
-        pass
-
-
-    def add(self, fetcher: AlphavantageFetcher) -> None:
-        pass
-
-
-
-ara = subclass()
-
-ara.add(AlphavantageFetcher("ara","ara","ara"))
-
-print( issubclass(AlphavantageFetcher, Fetcher) )
+print( Type[Fetcher] )
+print( issubclass(AlphaFetcher, Fetcher) )
+print( isinstance( AlphaFetcher(), Fetcher ))

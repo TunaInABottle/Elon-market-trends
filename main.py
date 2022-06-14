@@ -1,4 +1,6 @@
+from AlphavantageFetcher import AlphavantageFetcher
 from FetcherClusterFactory import FetcherClusterFactory
+from AlphavantageFetcherCluster import AlphavantageFetcherCluster
 from setup_logger import fetch_log
 
 fetch_log.info("New execution launched!")
@@ -21,6 +23,4 @@ markets_of_interest = {
 }
 
 
-
-
-FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
+aFactory = FetcherClusterFactory.create("AlphaVantage", markets_of_interest)

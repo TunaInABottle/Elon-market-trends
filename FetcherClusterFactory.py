@@ -7,7 +7,7 @@ class FetcherClusterFactory():
     """ Factory of clusters of web fetchers. """
 
     @staticmethod
-    def create(main_source: str, fetch_pools: dict) -> Type[FetcherCluster]:
+    def create(main_source: str, fetch_pools: dict) -> FetcherCluster:
         """
         Creates a cluster of web fetchers.
 
@@ -30,5 +30,16 @@ class FetcherClusterFactory():
         if main_source not in fetch_pools:
             fetch_log.error(f"cluster_fetcher_factory: {main_source} is not in the list of sources that can be fetched")
             raise KeyError
+
+        fetch_log.info( type(webSources[main_source].from_dict( 
+            {
+        "api_key": "as",
+        "Stock": {
+            "url_name": "TIME_SERIES",
+            "markets": ["IBM"]
+            }
+        }
+
+         ) ) )
 
         return webSources[main_source].from_dict(fetch_pools[main_source])

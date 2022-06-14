@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Type
 from Fetcher import Fetcher
+from typing import TypeVar
 
 
-
+T = TypeVar("T", bound="FetcherCluster")
 
 class FetcherCluster(ABC):
     """
@@ -21,7 +22,7 @@ class FetcherCluster(ABC):
 
     @classmethod
     @abstractmethod
-    def from_dict(cls, fetcher_dict: dict) -> None:
+    def from_dict(cls: Type[T], fetcher_dict: dict) -> T:
             
         """
         Istantiate class from a dictionary
