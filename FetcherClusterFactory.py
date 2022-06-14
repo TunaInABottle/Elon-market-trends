@@ -1,4 +1,4 @@
-from FetcherCluster import FetcherCluster
+from AbstractFetcher import FetcherCluster
 from AlphavantageAPI import AlphavantageFetcherCluster
 from setup_logger import fetch_log
 from typing import Type
