@@ -10,7 +10,7 @@ from MessageData import MessageData
 
 class Fetcher(ABC):
     @abstractmethod
-    def fetch(self) -> Market:
+    def fetch(self) -> MessageData:
         """ Obtain information from the endpoint.
 
         Returns:

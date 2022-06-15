@@ -62,7 +62,7 @@ class AlphavantageFetcher(Fetcher):
             err_mex = content["Error Message"]
             fetch_log.error(f"request failed: {err_mex}")
             raise KeyError
-
+            
         return content
 
     def _request_type(self, market_type: MarketType) -> str:
