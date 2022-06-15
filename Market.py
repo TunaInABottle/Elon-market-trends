@@ -8,13 +8,13 @@ import enum
 
 T = typing.TypeVar('T', bound='Trend')
 
-#####
+##########################
  
 class MarketType(enum.Enum):
     STOCK = 1
     CRYPTO = 2
 
-#####
+##########################
 
 class Trend(MessageData):
     def __init__(self, datetime: datetime, open: str, high: str, low: str, close: str, volume: str) -> None:
