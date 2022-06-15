@@ -44,19 +44,25 @@ class TwitterFetcher(Fetcher):
             tweets_to_return.append(dic)
         return tweets_to_return
 
-    def fetch(self) -> list: #possible to change this to list?
+    def fetch(self) -> list: #TweetFeed ??
         '''returns list of dictionaries with the twitter data'''
 
         tweets = self._api.user_timeline(id=44196397, count=10, # 200 is the maximum allowed count
                                         include_rts = True,tweet_mode='extended')
         tweets_to_return = []
+
+        #Instantiate the empty class that collects the tweet in here
+
         for t in tweets[:10]:
+            #Make an add method to add a new tweet in the class, e.g.
+            #Feed.add( t.id, str(t.created_at), etcetera )
             dic = {}
             dic['id'] = t.id
             dic['created_at'] = str(t.created_at)
             dic['text'] = t.full_text
             dic['retweet_count'] = t.retweet_count
             tweets_to_return.append(dic)
+        # return such class
         return tweets_to_return
         
 
