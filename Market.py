@@ -17,7 +17,7 @@ class MarketType(enum.Enum):
 #####
 
 class Trend(MessageData):
-    def __init__(self, datetime: datetime, open: str, high: str, low: str, close: str, volume: str, marketName: str = "") -> None:
+    def __init__(self, datetime: datetime, open: str, high: str, low: str, close: str, volume: str) -> None:
         self.datetime = datetime
         self.open = open
         self.high = high
@@ -27,7 +27,6 @@ class Trend(MessageData):
 
     def to_repr(self) -> dict:
         return {
-            "marketName": self.marketName,
             "datetime": self.datetime.isoformat(),
             "open": self.open,
             "high": self.high,
@@ -44,8 +43,7 @@ class Trend(MessageData):
             raw_data["high"],
             raw_data["low"],
             raw_data["close"],
-            raw_data["volume"],
-            raw_data["marketName"]
+            raw_data["volume"]
         )
 
 
@@ -56,7 +54,7 @@ class Market:
     """
     def __init__(self, name: str, type: str) -> None:
         self.name = name
-        self._trend_list = []
+        self._trend_list: List[Trend] = []
 
     def add(self, trends: List[Trend]) -> None:
         self._trend_list = self._trend_list + trends
@@ -80,7 +78,6 @@ class TrendBuilder:
             raw_data["2. high"],
             raw_data["3. low"],
             raw_data["4. close"],
-            raw_data["5. volume"],
-            marketName
+            raw_data["5. volume"]
         )
 

@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Type
 from typing import TypeVar
+from Market import Market
 
 from MessageData import MessageData
 
-### examples of abstract classhttps://www.pythontutorial.net/python-oop/python-abstract-class/
+### examples of abstract class https://www.pythontutorial.net/python-oop/python-abstract-class/
 ### @abstractclass meaning https://www.geeksforgeeks.org/classmethod-in-python/
 
 class Fetcher(ABC):
     @abstractmethod
-    def fetch(self) -> List[MessageData]:
+    def fetch(self) -> Market:
         """ Obtain information from the endpoint.
 
         Returns:

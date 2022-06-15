@@ -17,12 +17,12 @@ class AlphavantageFetcher(Fetcher):
         self._market = market
         fetch_log.info(f"istantiated: {type} - {market}")
 
-    def fetch(self) -> List[MessageData]: #@TODO should _type be more robust?
+    def fetch(self) -> Market: #@TODO should _type be more robust?
         r = requests.get( 'https://www.alphavantage.co/query?function=' + self._type + '_INTRADAY&symbol=' + self._market + '&market=USD&interval=5min&outputsize=full&apikey=' + self._api_key )
         
         content = r.json()
 
-        trends_list = []
+        trends_list: List[Trend] = []
 
         movement_list = None
         if self._type == "CRYPTO":
