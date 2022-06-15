@@ -1,6 +1,8 @@
 from AbstractFetcher import Fetcher, FetcherCluster
+from Market import Market
+from MessageData import MessageData
 from setup_logger import fetch_log
-from typing import Dict, Type, TypeVar
+from typing import Dict, List, Type, TypeVar
 import requests
 
 T = TypeVar("T", bound="AlphavantageFetcherCluster")
@@ -15,7 +17,7 @@ class AlphavantageFetcher(Fetcher):
         self._market = market
         fetch_log.info(f"istantiated: {type} - {market}")
 
-    def fetch(self) -> str: #@TODO should _type be more robust?
+    def fetch(self) -> List[MessageData]: #@TODO should _type be more robust?
         r = requests.get( 'https://www.alphavantage.co/query?function=' + self._type + '_INTRADAY&symbol=' + self._market + '&market=USD&interval=5min&outputsize=full&apikey=' + self._api_key )
         return r.json()
 

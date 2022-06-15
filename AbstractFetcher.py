@@ -1,36 +1,21 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Type
+from typing import Dict, List, Type
 from typing import TypeVar
+
+from MessageData import MessageData
 
 ### examples of abstract classhttps://www.pythontutorial.net/python-oop/python-abstract-class/
 ### @abstractclass meaning https://www.geeksforgeeks.org/classmethod-in-python/
 
 class Fetcher(ABC):
     @abstractmethod
-    def fetch(self) -> str:
-        """ Obtain information.
+    def fetch(self) -> List[MessageData]:
+        """ Obtain information from the endpoint.
 
         Returns:
         The information the fetcher is requested to fetch.
         """
         pass
-
-    """"
-
-    @property # says that the next function has to be read as a property 
-    @abstractmethod
-    def _url():
-        raise NotImplementedError
-
-    
-    @property
-    @abstractmethod
-    def _api_key():
-        raise NotImplementedError
-    
-    def print_constant(self):
-        print(type(self)._url)
-    """
 
 
 
@@ -47,12 +32,6 @@ class FetcherCluster(ABC):
         self._fetcher_list: Dict[str, Type[Fetcher]] = {}
         self._api_key = api_key
 
-
-    #@property
-    #@abstractmethod
-    #def _api_key():
-    #    raise NotImplementedError
-
     @classmethod
     @abstractmethod
     def from_dict(cls: Type[T], fetcher_dict: dict) -> T:
@@ -63,7 +42,7 @@ class FetcherCluster(ABC):
         pass
 
     @abstractmethod
-    def fetch_all(self) -> str:
+    def fetch_all(self) -> dict:
         pass
 
     @abstractmethod

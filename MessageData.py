@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import typing
+from typing import Type
 
 T = typing.TypeVar('T', bound='MessageData') #source https://stackoverflow.com/questions/58986031/type-hinting-child-class-returning-self
 
@@ -20,9 +21,9 @@ class MessageData(ABC):
         """
         pass
 
-
+    @staticmethod
     @abstractmethod
-    def from_repr(raw_data: dict) -> T:
+    def from_repr(raw_data: dict) -> 'MessageData':
         """Make a new object that holds the data given.
 
         Args:

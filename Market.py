@@ -1,6 +1,8 @@
 from datetime import datetime
+
 from MessageData import MessageData
 import typing
+from typing import Type
 import dateutil.parser as parser
 
 T = typing.TypeVar('T', bound='Market')
@@ -28,7 +30,7 @@ class Market(MessageData):
         }
 
     @staticmethod
-    def from_repr(raw_data: dict) -> T:
+    def from_repr(raw_data: dict) -> 'Market':
         return Market(
             raw_data["datetime"],
             raw_data["open"],
@@ -40,7 +42,7 @@ class Market(MessageData):
         )
 
     @staticmethod
-    def from_alphaVantage_repr(raw_data: dict, datetime: str, marketName: str = "") -> T:
+    def from_alphaVantage_repr(raw_data: dict, datetime: str, marketName: str = "") -> 'Market':
         """Make a new object that holds the data given.
 
         Args:
