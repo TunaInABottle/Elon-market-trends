@@ -6,6 +6,7 @@ from datetime import datetime
 from data_generator import generate_message
 import twitter_data
 from kafka import KafkaProducer
+from setup_logger import fetch_log 
 
 # Messages will be serialized as JSON
 def serializer(message):
@@ -25,6 +26,7 @@ if __name__ == '__main__':
     
     for tweet in twitterFetcher.get_twitter_data(given_id):
         tweet_message = tweet
+        fetch_log.info(f'Producing message @ {datetime.now()} | Message = {str(tweet_message)}')
         print(f'Producing message @ {datetime.now()} | Message = {str(tweet_message)}')
         producer.send('pizza', tweet_message)
         # Sleep for 3 seconds
