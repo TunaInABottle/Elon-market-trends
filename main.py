@@ -12,12 +12,10 @@ markets_of_interest = {
     "AlphaVantage": {
         "api_key": alphavantage_key,
         MarketType.STOCK: {
-            "url_name": "TIME_SERIES",
             "markets": ["IBM"]
         },
         MarketType.CRYPTO: { # full list of cryptos can be found here https://www.alphavantage.co/documentation/
-            "url_name": "CRYPTO",
-            "markets": ["BTC", "DOGE", "PUSA"]
+            "markets": ["BTC", "DOGE"]
         }
     }
 }

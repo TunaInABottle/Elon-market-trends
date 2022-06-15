@@ -45,7 +45,7 @@ class AlphavantageFetcher(Fetcher):
             movement_list = content['Time Series (5min)']
             
         for datetime, trend in movement_list.items():
-            trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime, self._market_name)]
+            trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]
 
         market.add(trends_list)
         return market
