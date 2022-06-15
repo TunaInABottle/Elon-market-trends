@@ -58,11 +58,14 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return cluster
 
 
-    def fetch_all(self) -> str:
-        for key, val in self._fetcher_dict.items():
-            fetch_log.debug( val.fetch() )
+    def fetch_all(self) -> dict:
 
-        return "" #@TODO
+        ret_val = {}
+
+        for key, fetcher in self._fetcher_dict.items():
+            ret_val[key] = fetcher.fetch()
+
+        return ret_val
 
 
     def add(self, fetcher: AlphavantageFetcher) -> None:

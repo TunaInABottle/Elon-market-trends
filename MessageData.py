@@ -22,7 +22,6 @@ class MessageData(ABC):
 
 
     @abstractmethod
-    @staticmethod
     def from_repr(raw_data: dict) -> T:
         """Make a new object that holds the data given.
 
