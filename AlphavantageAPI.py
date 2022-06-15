@@ -116,7 +116,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
 
         return cluster
 
-    def fetch_all(self) -> Dict[str, Market]:
+    def fetch_all(self) -> dict:
         ret_val = {}
 
         for key, fetcher in self._fetcher_dict.items():
