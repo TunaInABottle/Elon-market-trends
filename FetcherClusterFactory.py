@@ -1,5 +1,5 @@
-from FetcherCluster import FetcherCluster
-from AlphavantageFetcherCluster import AlphavantageFetcherCluster
+from AbstractFetcher import FetcherCluster
+from AlphavantageAPI import AlphavantageFetcherCluster
 from setup_logger import fetch_log
 from typing import Type
 
@@ -7,7 +7,7 @@ class FetcherClusterFactory():
     """ Factory of clusters of web fetchers. """
 
     @staticmethod
-    def create(main_source: str, fetch_pools: dict) -> Type[FetcherCluster]:
+    def create(main_source: str, fetch_pools: dict) -> FetcherCluster:
         """
         Creates a cluster of web fetchers.
 

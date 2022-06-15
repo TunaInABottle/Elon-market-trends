@@ -1,5 +1,8 @@
 from FetcherClusterFactory import FetcherClusterFactory
+from AlphavantageAPI import AlphavantageFetcherCluster
+from Market import Trend
 from setup_logger import fetch_log
+import json
 
 fetch_log.info("New execution launched!")
 
@@ -21,6 +24,9 @@ markets_of_interest = {
 }
 
 
+alphaCluster = FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
 
+market =  alphaCluster.fetch_all()
 
-FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
+print("printing market")
+print(market)
