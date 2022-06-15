@@ -2,21 +2,28 @@ from datetime import datetime
 
 from MessageData import MessageData
 import typing
-from typing import Type
+from typing import List
 import dateutil.parser as parser
+import enum
 
-T = typing.TypeVar('T', bound='Market')
+T = typing.TypeVar('T', bound='Trend')
 
-class Market(MessageData):
+####
+ 
+class MarketType(enum.Enum):
+    STOCK = "TIME_SERIES"
+    CRYPTO = "CRYPTO"
+
+#####
+
+class Trend(MessageData):
     def __init__(self, datetime: datetime, open: str, high: str, low: str, close: str, volume: str, marketName: str = "") -> None:
-        #super.__init__()
         self.datetime = datetime
         self.open = open
         self.high = high
         self.low = low
         self.close = close
         self.volume = volume
-        self.marketName = marketName
 
     def to_repr(self) -> dict:
         return {
@@ -30,8 +37,8 @@ class Market(MessageData):
         }
 
     @staticmethod
-    def from_repr(raw_data: dict) -> 'Market':
-        return Market(
+    def from_repr(raw_data: dict) -> 'Trend':
+        return Trend(
             raw_data["datetime"],
             raw_data["open"],
             raw_data["high"],
@@ -41,8 +48,24 @@ class Market(MessageData):
             raw_data["marketName"]
         )
 
+
+##########################
+
+class Market:
+    """Representation of a market    
+    """
+    def __init__(self, name: str, type: str) -> None:
+        self.name = name
+        self._trend_list = []
+
+    def add(self, trends: List[Trend]) -> None:
+        self._trend_list = self._trend_list + trends
+
+##########################
+
+class TrendBuilder:
     @staticmethod
-    def from_alphaVantage_repr(raw_data: dict, datetime: str, marketName: str = "") -> 'Market':
+    def from_alphaVantage_repr(raw_data: dict, datetime: str, marketName: str = "") -> Trend:
         """Make a new object that holds the data given.
 
         Args:
@@ -51,7 +74,7 @@ class Market(MessageData):
         Returns:
             An instantiated object.
         """
-        return Market(
+        return Trend(
             parser.parse(datetime),
             raw_data["1. open"],
             raw_data["2. high"],
@@ -60,3 +83,4 @@ class Market(MessageData):
             raw_data["5. volume"],
             marketName
         )
+

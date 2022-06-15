@@ -1,5 +1,5 @@
 from AbstractFetcher import Fetcher, FetcherCluster
-from Market import Market
+from Market import Market, Trend, TrendBuilder
 from MessageData import MessageData
 from setup_logger import fetch_log
 from typing import Dict, List, Type, TypeVar
@@ -19,7 +19,25 @@ class AlphavantageFetcher(Fetcher):
 
     def fetch(self) -> List[MessageData]: #@TODO should _type be more robust?
         r = requests.get( 'https://www.alphavantage.co/query?function=' + self._type + '_INTRADAY&symbol=' + self._market + '&market=USD&interval=5min&outputsize=full&apikey=' + self._api_key )
-        return r.json()
+        
+        content = r.json()
+
+        trends_list = []
+
+        movement_list = None
+        if self._type == "CRYPTO":
+            movement_list = content['Time Series Crypto (5min)']
+        else: #normal stock market
+            movement_list = content['Time Series (5min)']
+            
+
+
+        for datetime, trend in movement_list.items():
+            trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime, self._market)]
+
+        market = Market(self._market, self._type)
+        market.add(trends_list)
+        return market
 
     def get_characteristics(self) -> str:
         return f"{self._type} {self._market}"
@@ -60,7 +78,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return cluster
 
 
-    def fetch_all(self) -> dict:
+    def fetch_all(self) -> dict: #Dict[str, List[Market]]
 
         ret_val = {}
 

@@ -1,6 +1,6 @@
 from FetcherClusterFactory import FetcherClusterFactory
 from AlphavantageAPI import AlphavantageFetcherCluster
-from Market import Market
+from Market import Trend
 from setup_logger import fetch_log
 import json
 
@@ -28,14 +28,5 @@ alphaCluster = FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
 
 market =  alphaCluster.fetch_all()
 
-movem =  market['TIME_SERIES IBM']['Time Series (5min)']['2022-06-13 19:50:00']
-
-print( movem )
-print( type(movem) )
-
-
-print( market['TIME_SERIES IBM']['Time Series (5min)']['2022-06-13 19:50:00'] )
-
-the_mar = Market.from_alphaVantage_repr(movem, '2022-06-13 19:50:00', 'STOCK IBM')
-
-print( the_mar.to_repr() )
+print("printing market")
+print(market)
