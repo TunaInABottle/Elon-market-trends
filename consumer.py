@@ -2,6 +2,7 @@
 
 import json 
 from kafka import KafkaConsumer
+from setup_logger import fetch_log 
 
 if __name__ == '__main__':
     # Kafka Consumer 
@@ -12,3 +13,4 @@ if __name__ == '__main__':
     )
     for message in consumer:
         print(json.loads(message.value))
+        fetch_log.info(json.loads(message.value))
