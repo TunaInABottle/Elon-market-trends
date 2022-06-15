@@ -2,8 +2,7 @@
 
 import os
 import tweepy
-import secretfile
-from Fetcher import Fetcher
+from AbstractFetcher import Fetcher
 from setup_logger import fetch_log 
 
 
