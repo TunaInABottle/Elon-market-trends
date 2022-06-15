@@ -49,16 +49,32 @@ class Trend(MessageData):
 
 ##########################
 
-class Market:
-    """Representation of a market    
-    """
+class Market(MessageData):
+    """Representation of a market"""
     def __init__(self, name: str, type: MarketType) -> None:
+        """
+        Args:
+            name (str): The name of the market.
+            market_type (MarketType): The type of market.
+        """
         self.name = name
         self.type = type
         self._trend_list: List[Trend] = []
 
     def add(self, trends: List[Trend]) -> None:
+        """Add a series of trends to the market
+        
+        Args:
+            trends (List[Trend]): trends to add to this Market
+        """
         self._trend_list = self._trend_list + trends
+
+    def from_repr(self):
+        pass
+
+    def to_repr(self) -> dict:
+        pass
+
 
 ##########################
 

@@ -1,5 +1,6 @@
 from FetcherClusterFactory import FetcherClusterFactory
-from Market import MarketType
+from Market import Market, MarketType, Trend
+from MessageData import MessageData
 from setup_logger import fetch_log
 
 fetch_log.info("New execution launched!")

@@ -1,5 +1,6 @@
 from AbstractFetcher import Fetcher, FetcherCluster
 from Market import Market, MarketType, Trend, TrendBuilder
+from MessageData import MessageData
 from setup_logger import fetch_log
 from typing import Dict, List, Type, TypeVar
 import requests
@@ -17,7 +18,6 @@ class AlphavantageFetcher(Fetcher):
             api_key (str): API key for AlphaVantage.
             market_type (MarketType): Which kind of market is being fetched.
             market_name (str): The name of the market (e.g. IBM).
-
         """
         super().__init__()
         self._api_key = api_key
@@ -62,7 +62,7 @@ class AlphavantageFetcher(Fetcher):
             err_mex = content["Error Message"]
             fetch_log.error(f"request failed: {err_mex}")
             raise KeyError
-            
+
         return content
 
     def _request_type(self, market_type: MarketType) -> str:
