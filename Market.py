@@ -8,11 +8,11 @@ import enum
 
 T = typing.TypeVar('T', bound='Trend')
 
-####
+#####
  
 class MarketType(enum.Enum):
-    STOCK = "TIME_SERIES"
-    CRYPTO = "CRYPTO"
+    STOCK = 1
+    CRYPTO = 2
 
 #####
 
@@ -52,8 +52,9 @@ class Trend(MessageData):
 class Market:
     """Representation of a market    
     """
-    def __init__(self, name: str, type: str) -> None:
+    def __init__(self, name: str, type: MarketType) -> None:
         self.name = name
+        self.type = type
         self._trend_list: List[Trend] = []
 
     def add(self, trends: List[Trend]) -> None:
