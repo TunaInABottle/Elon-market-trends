@@ -70,10 +70,10 @@ class Market(MessageData):
         self._trend_list = self._trend_list + trends
 
     def from_repr(self):
-        pass
+        pass #TODO
 
     def to_repr(self) -> dict:
-        pass
+        pass #TODO
 
 
 ##########################
