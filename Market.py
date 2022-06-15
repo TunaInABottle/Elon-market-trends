@@ -17,7 +17,17 @@ class MarketType(enum.Enum):
 ##########################
 
 class Trend(MessageData):
+    """Represents a time-bounded trend of a market."""
     def __init__(self, datetime: datetime, open: str, high: str, low: str, close: str, volume: str) -> None:
+        """
+        Args:
+            datetime: when the trend is happening.
+            open: TODO
+            high: TODO
+            low: TODO
+            close: TODO
+            volume: TODO
+        """
         self.datetime = datetime
         self.open = open
         self.high = high
@@ -54,8 +64,8 @@ class Market(MessageData):
     def __init__(self, name: str, type: MarketType) -> None:
         """
         Args:
-            name (str): The name of the market.
-            market_type (MarketType): The type of market.
+            name: The name of the market.
+            market_type: The type of market.
         """
         self.name = name
         self.type = type
@@ -65,23 +75,29 @@ class Market(MessageData):
         """Add a series of trends to the market
         
         Args:
-            trends (List[Trend]): trends to add to this Market
+            trends: trends to add to this Market
         """
         self._trend_list = self._trend_list + trends
 
-    def from_repr(self):
-        pass #TODO
+    @staticmethod
+    def from_repr(raw_data: dict) -> 'Market':
+        return Market( raw_data["name"], raw_data["type"] )
 
     def to_repr(self) -> dict:
-        pass #TODO
+        return {
+            "marketName": self.name,
+            "type": MarketType.name,
+            "trends": self._trend_list
+        }
 
 
 ##########################
 
 class TrendBuilder:
+    """Builder for instantiating new market trends."""
     @staticmethod
-    def from_alphaVantage_repr(raw_data: dict, datetime: str, marketName: str = "") -> Trend:
-        """Make a new object that holds the data given.
+    def from_alphaVantage_repr(raw_data: dict, datetime: str) -> Trend:
+        """Make a new Trend object from an AlphaVantage request.
 
         Args:
             raw_data: a dictionary coming from a call to AlphaVantage API, needed to instantiate an object.

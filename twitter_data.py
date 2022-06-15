@@ -9,7 +9,6 @@ from setup_logger import fetch_log
 #had to create a secretfile.py file to store the API keys and tokens because I couldn't get the environment variables to work when there already exists a .env folder, but I need a .env file to store the API keys and tokens.
 
 class TwitterFetcher(Fetcher):
-
     '''Class to get fetch the twitter data from a given user id'''
 
     def __init__(self):

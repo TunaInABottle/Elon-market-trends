@@ -12,8 +12,8 @@ class FetcherClusterFactory():
         Creates a cluster of web fetchers.
 
         Parameters:
-            main_source (str): URL of the source to be fetched.
-            fetch_pools (dict): details on how to instantiate a cluster of web fetchers, it must contain main_souce as key.
+            main_source: URL of the source to be fetched.
+            fetch_pools: details on how to instantiate a cluster of web fetchers, it must contain main_souce as key.
 
         Returns:
             A cluster of web fetchers for the specified source.

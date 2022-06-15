@@ -15,9 +15,9 @@ class AlphavantageFetcher(Fetcher):
     def __init__(self, api_key: str, market_type: MarketType, market_name: str) -> None:
         """
         Args:
-            api_key (str): API key for AlphaVantage.
-            market_type (MarketType): Which kind of market is being fetched.
-            market_name (str): The name of the market (e.g. IBM).
+            api_key: API key for AlphaVantage.
+            market_type: Which kind of market is being fetched.
+            market_name: The name of the market (e.g. IBM).
         """
         super().__init__()
         self._api_key = api_key
@@ -88,10 +88,6 @@ class AlphavantageFetcherCluster(FetcherCluster):
     """Cluster of web fetchers from AlphaVantage API."""
 
     def __init__(self, api_key: str) -> None:
-        """
-        Args:
-            api_key (str): the API key for AlphaVantage.
-        """
         self._fetcher_dict: Dict[str, AlphavantageFetcher] = {}
         self._api_key: str = api_key
         fetch_log.info("istantiated")
@@ -101,7 +97,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
         """Istantiate a cluster of AlphaVantage Fetchers from a dictionary
         
         Args:
-            fetcher_dict (dict): A dictionary detailing which fetchers need to be instantiated.
+            fetcher_dict: A dictionary detailing which fetchers need to be instantiated.
 
         Returns:
             The AlphaVantage cluster with the requested fetcher instantiated.
@@ -121,11 +117,6 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return cluster
 
     def fetch_all(self) -> Dict[str, Market]:
-        """Interrogate all the fetchers within the cluster.
-        
-        Returns:
-            A dictionary where for each market it is provided the details.
-        """
         ret_val = {}
 
         for key, fetcher in self._fetcher_dict.items():
@@ -134,9 +125,4 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return ret_val
 
     def add(self, fetcher: AlphavantageFetcher) -> None:
-        """Add a fetcher to the cluster.
-        
-        Args:
-            fetcher (AlphavantageFetcher): the fecter to be added to the cluster.
-        """
         self._fetcher_dict[fetcher.get_characteristics()] = fetcher
