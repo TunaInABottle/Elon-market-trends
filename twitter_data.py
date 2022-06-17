@@ -1,12 +1,29 @@
 #TRYING TO MAKE CLASSES WORK
 
 import os
+from MessageData import MessageData
 import tweepy
 from AbstractFetcher import Fetcher
 from setup_logger import fetch_log 
 from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
 #import secretfile
 load_dotenv(".env")
+
+class Tweet(MessageData):
+    def __init__(self, twitter_dict: dict) -> None:
+        self.id = twitter_dict.id
+        self.creation_time = str(twitter_dict.created_at)
+        self.text = twitter_dict.full_text
+        self.retweets = twitter_dict.retweet_count
+
+    def to_repr(self) -> dict:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def from_repr(raw_data: dict) -> 'Tweet':
+        pass
+    
 
 class TweetFeed():
     ''' Class containing the twitter Data'''
@@ -62,12 +79,7 @@ class TwitterFetcher(Fetcher):
         NewTweets= TweetFeed()
 
         for tweet in tweets[:10]:
-            dic = {}
-            dic['id'] = tweet.id
-            dic['created_at'] = str(tweet.created_at)
-            dic['text'] = tweet.full_text
-            dic['retweet_count'] = tweet.retweet_count
-            NewTweets.add(dic)
+            NewTweets.add( Tweet( tweet ) )
         return NewTweets
         
 
