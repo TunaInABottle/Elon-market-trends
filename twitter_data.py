@@ -20,7 +20,6 @@ class Tweet(MessageData):
         pass
 
     @staticmethod
-    @abstractmethod
     def from_repr(raw_data: dict) -> 'Tweet':
         pass
     
