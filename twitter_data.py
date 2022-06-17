@@ -2,12 +2,11 @@
 
 import os
 import tweepy
-import secretfile
-from Fetcher import Fetcher
+from AbstractFetcher import Fetcher
 from setup_logger import fetch_log 
-
-
-#had to create a secretfile.py file to store the API keys and tokens because I couldn't get the environment variables to work when there already exists a .env folder, but I need a .env file to store the API keys and tokens.
+from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
+#import secretfile
+load_dotenv(".env")
 
 class TwitterFetcher(Fetcher):
 
