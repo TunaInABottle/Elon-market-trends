@@ -1,30 +1,37 @@
-from abc import ABC, abstractmethod
-from typing import Generic, Type, TypeVar
+# from abc import ABC, abstractmethod
+# from typing import Generic, Type, TypeVar
 
 
-class Fetcher(ABC):
-    @abstractmethod
-    def ara(self):
-        pass
+# class Fetcher(ABC):
+#     @abstractmethod
+#     def ara(self):
+#         pass
 
-class FetcherCluster(ABC):
-    @abstractmethod
-    def fetch_all(self, fec: Type[Fetcher]):
-        pass
+# class FetcherCluster(ABC):
+#     @abstractmethod
+#     def fetch_all(self, fec: Type[Fetcher]):
+#         pass
 
-#############
+# #############
 
-class AlphaFetcher(Fetcher):
-    def ara(self):
-        pass
+# class AlphaFetcher(Fetcher):
+#     def ara(self):
+#         pass
 
-class AlphaFetcherCluster(FetcherCluster):
-    def fetch_all(self, fec: AlphaFetcher):
-        pass
+# class AlphaFetcherCluster(FetcherCluster):
+#     def fetch_all(self, fec: AlphaFetcher):
+#         pass
 
 
-r = AlphaFetcherCluster()
+# r = AlphaFetcherCluster()
 
-print( Type[Fetcher] )
-print( issubclass(AlphaFetcher, Fetcher) )
-print( isinstance( AlphaFetcher(), Fetcher ))
+# print( Type[Fetcher] )
+# print( issubclass(AlphaFetcher, Fetcher) )
+# print( isinstance( AlphaFetcher(), Fetcher ))
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv("./.env")
+
+print( os.getenv("API_KEY") )
