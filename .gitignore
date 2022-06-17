@@ -9,3 +9,4 @@ log
 config/AlphaVantageKey.txt
 twitter_data_old.py
 sandbox.py
+node_modules

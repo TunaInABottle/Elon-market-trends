@@ -8,6 +8,14 @@ from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
 #import secretfile
 load_dotenv(".env")
 
+class Feed():
+    def __init__(self):
+        self.tweets = []
+    
+    def add(self, tweet):
+        self.tweets.append(tweet)
+
+
 class TwitterFetcher(Fetcher):
     '''Class to get fetch the twitter data from a given user id'''
 
@@ -48,20 +56,17 @@ class TwitterFetcher(Fetcher):
 
         tweets = self._api.user_timeline(id=44196397, count=10, # 200 is the maximum allowed count
                                         include_rts = True,tweet_mode='extended')
-        tweets_to_return = []
 
         #Instantiate the empty class that collects the tweet in here
+        NewTweets= Feed()
 
         for t in tweets[:10]:
-            #Make an add method to add a new tweet in the class, e.g.
-            #Feed.add( t.id, str(t.created_at), etcetera )
             dic = {}
             dic['id'] = t.id
             dic['created_at'] = str(t.created_at)
             dic['text'] = t.full_text
             dic['retweet_count'] = t.retweet_count
-            tweets_to_return.append(dic)
-        # return such class
-        return tweets_to_return
+            NewTweets.add(dic)
+        return NewTweets
         
 

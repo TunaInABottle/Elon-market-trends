@@ -1,9 +1,7 @@
 
 import time
 import json
-import random
 from datetime import datetime
-from data_generator import generate_message
 import twitter_data
 from kafka import KafkaProducer
 from setup_logger import fetch_log 
@@ -23,7 +21,6 @@ given_id = 44196397 #Elon Musk
 
 if __name__ == '__main__':
     # Infinite loop - runs until you kill the program
-    
     for tweet in twitterFetcher.get_twitter_data(given_id):
         tweet_message = tweet
         fetch_log.info(f'Producing message @ {datetime.now()} | Message = {str(tweet_message)}')
