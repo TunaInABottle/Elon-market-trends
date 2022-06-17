@@ -22,11 +22,11 @@ class Trend(MessageData):
         """
         Args:
             datetime: when the trend is happening.
-            open: TODO
-            high: TODO
-            low: TODO
-            close: TODO
-            volume: TODO
+            open: at which amount the market's trend opened.
+            high: the highest the trend reached in a certain time span.
+            low: the lowest the trend reached in a certain time span.
+            close: at which amount the market's trend close.
+            volume: number of transaction for this trend.
         """
         self.datetime = datetime
         self.open = open
@@ -80,14 +80,21 @@ class Market(MessageData):
         self._trend_list = self._trend_list + trends
 
     @staticmethod
-    def from_repr(raw_data: dict) -> 'Market':
-        return Market( raw_data["name"], raw_data["type"] )
+    def from_repr(raw_data: dict) -> 'Market': #TODO check if works as expected
+        new_market = Market( raw_data["marketName"], raw_data["type"] )
+
+        [new_market.add(trend) for trend in raw_data["trends"]]
+
+        return new_market
 
     def to_repr(self) -> dict:
+
+        trends = [ trend.to_repr() for trend in self._trend_list ]
+
         return {
             "marketName": self.name,
-            "type": MarketType.name,
-            "trends": self._trend_list
+            "type": self.type.name,
+            "trends": trends
         }
 
 

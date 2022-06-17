@@ -29,9 +29,16 @@
 # print( issubclass(AlphaFetcher, Fetcher) )
 # print( isinstance( AlphaFetcher(), Fetcher ))
 
-from dotenv import load_dotenv
-import os
+###########################
 
-load_dotenv("./.env")
+# from dotenv import load_dotenv
+# import os
 
-print( os.getenv("API_KEY") )
+# load_dotenv("./.env")
+
+# print( os.getenv("API_KEY") )
+
+
+
+squares = [ x**2 for x in range(10) ]
+print (squares)
