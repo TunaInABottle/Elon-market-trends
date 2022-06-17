@@ -5,16 +5,13 @@ from typing import Type
 T = typing.TypeVar('T', bound='MessageData') #source https://stackoverflow.com/questions/58986031/type-hinting-child-class-returning-self
 
 class MessageData(ABC):
+    """Abstract class for generic data that need to be shared through a pipeline"""
     def __init__(self) -> None:
         self.is_data = True
 
     @abstractmethod
     def to_repr(self) -> dict:
         """Convert the parameters stored in this class into a dictionary.
-
-        Args:
-            param1: The first parameter.
-            param2: The second parameter.
 
         Returns:
             A dictionary with the data of this object.
@@ -30,6 +27,6 @@ class MessageData(ABC):
             raw_data: a dictionary that has the data needed to instantiate an object.
 
         Returns:
-            An instantiated object.
+            An instantiated object with this type.
         """
         pass

@@ -1,8 +1,7 @@
 from FetcherClusterFactory import FetcherClusterFactory
-from AlphavantageAPI import AlphavantageFetcherCluster
-from Market import Trend
+from Market import Market, MarketType, Trend
+from MessageData import MessageData
 from setup_logger import fetch_log
-import json
 
 fetch_log.info("New execution launched!")
 
@@ -12,12 +11,10 @@ with open('./config/AlphaVantageKey.txt') as f:
 markets_of_interest = {
     "AlphaVantage": {
         "api_key": alphavantage_key,
-        "Stock": {
-            "url_name": "TIME_SERIES",
+        MarketType.STOCK: {
             "markets": ["IBM"]
         },
-        "Crypto": {
-            "url_name": "CRYPTO",
+        MarketType.CRYPTO: { # full list of cryptos can be found here https://www.alphavantage.co/documentation/
             "markets": ["BTC", "DOGE"]
         }
     }
@@ -30,3 +27,4 @@ market =  alphaCluster.fetch_all()
 
 print("printing market")
 print(market)
+print(market['STOCK IBM'])
