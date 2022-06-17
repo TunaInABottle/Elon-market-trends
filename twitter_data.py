@@ -9,6 +9,7 @@ from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
 load_dotenv(".env")
 
 class Feed():
+    ''' Class containing the twitter Data'''
     def __init__(self):
         self.tweets = []
     
