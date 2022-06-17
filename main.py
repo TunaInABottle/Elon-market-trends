@@ -12,7 +12,7 @@ markets_of_interest = {
     "AlphaVantage": {
         "api_key": alphavantage_key,
         MarketType.STOCK: {
-            "markets": ["IBM"]
+            "markets": ["IBM", "TSLA"]
         },
         MarketType.CRYPTO: { # full list of cryptos can be found here https://www.alphavantage.co/documentation/
             "markets": ["BTC", "DOGE"]
@@ -23,8 +23,9 @@ markets_of_interest = {
 
 alphaCluster = FetcherClusterFactory.create("AlphaVantage", markets_of_interest)
 
-market =  alphaCluster.fetch_all()
+markets =  alphaCluster.fetch_all()
 
 print("printing market")
 print(market)
 print(market['STOCK IBM'])
+print(market['STOCK IBM'].to_repr())
