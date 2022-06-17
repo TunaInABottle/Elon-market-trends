@@ -13,6 +13,7 @@
 ## How to Run:
 
 ### Setting up the virtual environment
+
 To install the requirements run this in terminal:
 `source init.sh`
 
@@ -22,16 +23,15 @@ To install the requirements run this in terminal:
 
 ### Create a Twitter Developer Account
 
-Once you have your twitter API account, create a file `secretfile.py` and put your keys in there like so:
-(replace 'your key' with your keys)
+Once you have your twitter API account, create a file `.env` and put your keys in there like so:
+(replace 'your_key' with your keys). This sets the API keys as environment variables.
 
-```python
-import os
-os.environ['API_KEY'] = 'your key'
-os.environ['API_KEY_SECRET'] = 'your key'
-os.environ['BEARER_TOKEN'] = 'your key
-os.environ['ACCESS_TOKEN'] = 'your key'
-os.environ['ACCESS_TOKEN_SECRET'] = 'your key'
+```bash
+API_KEY = your_key
+API_KEY_SECRET = your_key
+BEARER_TOKEN = your_key
+ACCESS_TOKEN= your_key
+ACCESS_TOKEN_SECRET= your_key
 ```
 
 ### Run the code
