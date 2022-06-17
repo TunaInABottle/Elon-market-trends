@@ -8,7 +8,7 @@ from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
 #import secretfile
 load_dotenv(".env")
 
-class Feed():
+class TweetFeed():
     ''' Class containing the twitter Data'''
     def __init__(self):
         self.tweets = []
@@ -43,30 +43,30 @@ class TwitterFetcher(Fetcher):
         tweets = self._api.user_timeline(id=given_id, count=10, # 200 is the maximum allowed count
                                         include_rts = True,tweet_mode='extended')
         tweets_to_return = []
-        for t in tweets[:10]:
+        for tweet in tweets[:10]:
             dic = {}
-            dic['id'] = t.id
-            dic['created_at'] = str(t.created_at)
-            dic['text'] = t.full_text
-            dic['retweet_count'] = t.retweet_count
+            dic['id'] = tweet.id
+            dic['created_at'] = str(tweet.created_at)
+            dic['text'] = tweet.full_text
+            dic['retweet_count'] = tweet.retweet_count
             tweets_to_return.append(dic)
         return tweets_to_return
 
-    def fetch(self) -> list: #TweetFeed ??
+    def fetch(self) -> TweetFeed:
         '''returns list of dictionaries with the twitter data'''
 
         tweets = self._api.user_timeline(id=44196397, count=10, # 200 is the maximum allowed count
-                                        include_rts = True,tweet_mode='extended')
+                                        include_rts = True, tweet_mode='extended')
 
         #Instantiate the empty class that collects the tweet in here
-        NewTweets= Feed()
+        NewTweets= TweetFeed()
 
-        for t in tweets[:10]:
+        for tweet in tweets[:10]:
             dic = {}
-            dic['id'] = t.id
-            dic['created_at'] = str(t.created_at)
-            dic['text'] = t.full_text
-            dic['retweet_count'] = t.retweet_count
+            dic['id'] = tweet.id
+            dic['created_at'] = str(tweet.created_at)
+            dic['text'] = tweet.full_text
+            dic['retweet_count'] = tweet.retweet_count
             NewTweets.add(dic)
         return NewTweets
         
