@@ -1,5 +1,6 @@
 #TRYING TO MAKE CLASSES WORK
 
+from curses import raw
 import os
 from MessageData import MessageData
 import tweepy
@@ -17,11 +18,18 @@ class Tweet(MessageData):
         self.retweets = twitter_dict.retweet_count
 
     def to_repr(self) -> dict:
-        pass
+        return {
+            "id": self.id,
+            "creation_time": self.creation_time, 
+            "text": self.text, 
+            "retweets": self.retweets
+            }
 
     @staticmethod
     def from_repr(raw_data: dict) -> 'Tweet':
-        pass
+        return Tweet(
+            raw_data
+        )
     
 
 class TweetFeed():
@@ -53,25 +61,10 @@ class TwitterFetcher(Fetcher):
                         return_type=dict)
        
 
-    def get_twitter_data(self, given_id) -> list:
+    def fetch(self, given_id) -> TweetFeed:
         '''returns list of dictionaries with the twitter data'''
 
         tweets = self._api.user_timeline(id=given_id, count=10, # 200 is the maximum allowed count
-                                        include_rts = True,tweet_mode='extended')
-        tweets_to_return = []
-        for tweet in tweets[:10]:
-            dic = {}
-            dic['id'] = tweet.id
-            dic['created_at'] = str(tweet.created_at)
-            dic['text'] = tweet.full_text
-            dic['retweet_count'] = tweet.retweet_count
-            tweets_to_return.append(dic)
-        return tweets_to_return
-
-    def fetch(self) -> TweetFeed:
-        '''returns list of dictionaries with the twitter data'''
-
-        tweets = self._api.user_timeline(id=44196397, count=10, # 200 is the maximum allowed count
                                         include_rts = True, tweet_mode='extended')
 
         #Instantiate the empty class that collects the tweet in here

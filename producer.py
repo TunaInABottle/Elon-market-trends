@@ -21,11 +21,12 @@ given_id = 44196397 #Elon Musk
 
 if __name__ == '__main__':
     # Infinite loop - runs until you kill the program
-    for tweet in twitterFetcher.get_twitter_data(given_id):
-        tweet_message = tweet
-        fetch_log.info(f'Producing message @ {datetime.now()} | Message = {str(tweet_message)}')
-        print(f'Producing message @ {datetime.now()} | Message = {str(tweet_message)}')
-        producer.send('pizza', tweet_message)
+    Tweets= twitterFetcher.fetch(given_id)
+
+    for tweet in Tweets.tweets:
+        fetch_log.info(f'Producing message @ {datetime.now()} | Message = {str(tweet.to_repr())}')
+        print(f'Producing message @ {datetime.now()} | Message = {str(tweet.to_repr())}')
+        producer.send('pizza', tweet.to_repr())
         # Sleep for 3 seconds
         time.sleep(3)
 
