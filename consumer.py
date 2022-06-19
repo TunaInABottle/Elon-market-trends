@@ -6,7 +6,7 @@ if __name__ == '__main__':
     # Kafka Consumer 
     consumer = KafkaConsumer(
         bootstrap_servers='localhost:9092',
-        auto_offset_reset='earliest',
+        #auto_offset_reset='earliest',
         group_id = "my_horse_is_amazing"
     )
 
