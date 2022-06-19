@@ -38,12 +38,15 @@ class AlphavantageFetcher(Fetcher):
         trends_list: List[Trend] = []
         market = Market(self._market_name, self.market_type)
 
+        fetch_log.debug(content.keys())
+
         movement_list = None
         if self.market_type == MarketType.CRYPTO:
             movement_list = content['Time Series Crypto (5min)']
         else: #stock market
             movement_list = content['Time Series (5min)']
             
+
         for datetime, trend in movement_list.items():
             trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]
 
@@ -80,7 +83,7 @@ class AlphavantageFetcher(Fetcher):
         Returns:
             A string with the characteristics.
         """
-        return f"{self.market_type.name} {self._market_name}"
+        return f"{self.market_type.name}_{self._market_name}"
 
 #######
 

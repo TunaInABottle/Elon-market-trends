@@ -11,3 +11,6 @@ twitter_data_old.py
 sandbox*
 node_modules
 sparkconsumer.py
+node_modules
+testing_grounds
+package-lock.json

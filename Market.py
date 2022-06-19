@@ -56,6 +56,17 @@ class Trend(MessageData):
             raw_data["volume"]
         )
 
+    def __eq__(self, other: 'Trend') -> bool:
+        if isinstance(other, Trend):
+            return (
+                self.datetime == other.datetime and
+                self.open == other.open and
+                self.high == other.high and
+                self.low == other.low and
+                self.close == other.close and
+                self.volume == other.volume)
+        return False
+
 
 ##########################
 
@@ -69,7 +80,7 @@ class Market(MessageData):
         """
         self.name = name
         self.type = type
-        self._trend_list: List[Trend] = []
+        self.trend_list: List[Trend] = []
 
     def add(self, trends: List[Trend]) -> None:
         """Add a series of trends to the market
@@ -77,7 +88,7 @@ class Market(MessageData):
         Args:
             trends: trends to add to this Market
         """
-        self._trend_list = self._trend_list + trends
+        self.trend_list = self.trend_list + trends
 
     @staticmethod
     def from_repr(raw_data: dict) -> 'Market': #TODO check if works as expected
@@ -89,7 +100,7 @@ class Market(MessageData):
 
     def to_repr(self) -> dict:
 
-        trends = [ trend.to_repr() for trend in self._trend_list ]
+        trends = [ trend.to_repr() for trend in self.trend_list ]
 
         return {
             "marketName": self.name,
