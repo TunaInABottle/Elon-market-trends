@@ -8,6 +8,6 @@ log
 .mypy_cache
 config/AlphaVantageKey.txt
 twitter_data_old.py
-sandbox.py
+sandbox*
 node_modules
 sparkconsumer.py

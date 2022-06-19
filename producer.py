@@ -5,14 +5,10 @@ import twitter_data
 from kafka import KafkaProducer
 #from setup_logger import fetch_log 
 
-# Messages will be serialized as JSON
-def serializer(message):
-    return json.dumps(message).encode('utf-8')
-
 # Kafka Producer
 producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda x: json.dumps(x).encode('utf-8')
+    bootstrap_servers = ['localhost:9092'],
+    value_serializer = lambda x: json.dumps(x).encode('utf-8')
 )
 
 twitterFetcher = twitter_data.TwitterFetcher()
