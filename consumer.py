@@ -7,8 +7,7 @@ if __name__ == '__main__':
     consumer = KafkaConsumer(
         bootstrap_servers='localhost:9092',
         auto_offset_reset='earliest',
-        group_id = "my_horse_is_amazing",
-        request_timeout_ms = 11000
+        group_id = "my_horse_is_amazing"
     )
 
     topic = TopicPartition(topic = 'pizza', partition = 0)
@@ -21,7 +20,7 @@ if __name__ == '__main__':
     for message in consumer:
         print(json.loads(message.value))
         fetch_log.info(json.loads(message.value))
-        
+
         if message.offset == last_offset - 1:
             break
 
