@@ -38,7 +38,16 @@
 
 # print( os.getenv("API_KEY") )
 
+from time import sleep
+from json import dumps
+from kafka import KafkaProducer
 
-
-squares = [ x**2 for x in range(10) ]
-print (squares)
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092'],
+    value_serializer=lambda x: dumps(x).encode('utf-8')
+)
+for j in range(9999):
+    print("Iteration", j)
+    data = {'counter': j}
+    producer.send('pizza', value=data)
+    sleep(5)
