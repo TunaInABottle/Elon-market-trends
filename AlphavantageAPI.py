@@ -41,11 +41,14 @@ class AlphavantageFetcher(Fetcher):
         fetch_log.debug(content.keys())
 
         movement_list = None
-        if self.market_type == MarketType.CRYPTO:
-            movement_list = content['Time Series Crypto (5min)']
-        else: #stock market
-            movement_list = content['Time Series (5min)']
-            
+        try:
+            if self.market_type == MarketType.CRYPTO:
+                movement_list = content['Time Series Crypto (5min)']
+            else: #stock market
+                movement_list = content['Time Series (5min)']
+        except KeyError as ke:
+            fetch_log.error(f"there is no time series key in here: {content}\n {ke}")
+
 
         for datetime, trend in movement_list.items():
             trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]

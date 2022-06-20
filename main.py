@@ -56,12 +56,13 @@ which_topic = TopicPartition(topic = 'STOCK_TSLA', partition = 0)
 fetch_log.debug("Initialising Kafka consumer")
 k_consumer = KafkaConsumer(
     bootstrap_servers='localhost:9092',
-    auto_offset_reset='latest',
-    group_id = "my_horse_is_amazing"
+    auto_offset_reset='earliest',
+    group_id = "amazing"
 )
 
 
 k_consumer.assign([which_topic])
+
 
 last_offset = k_consumer.position(which_topic)
 
@@ -82,8 +83,10 @@ if last_offset > 1:
     
     #TODO go back on the API fetch until the trend equals the one in the last message
     fetch_log.debug(f"Last message in queue {last_mex.to_repr()}")
-
+    k_consumer.close()
 else:
+    k_consumer.close()
+    fetch_log.info("No offset present, proceeding writing here regularly")
     for trend in reversed(focus_market.trend_list):
         fetch_log.debug(f"{trend}")
         k_producer.send('TSLA_STOCK', trend.to_repr())

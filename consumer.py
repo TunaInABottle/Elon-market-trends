@@ -15,11 +15,12 @@ if __name__ == '__main__':
 
     last_offset = consumer.position(topic)
     
-    # consumer.seek( topic, last_offset - 100 ) # obtain the last 100 elements
+    print(last_offset)
+    #consumer.seek( topic, last_offset - 100 ) # obtain the last 100 elements
 
     for message in consumer:
         print(json.loads(message.value))
-        fetch_log.info(json.loads(message.value))
+        #cfetch_log.info(json.loads(message.value))
 
         if message.offset == last_offset - 1:
             break
