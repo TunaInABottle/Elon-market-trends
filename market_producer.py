@@ -88,7 +88,7 @@ if __name__ == '__main__':
     k_consumer = KafkaConsumer(
         bootstrap_servers='localhost:9092',
         auto_offset_reset='latest',
-        #group_id = "amazo"
+        group_id = "piro"
     )
     k_consumer.assign([which_topic])
 
@@ -104,7 +104,7 @@ if __name__ == '__main__':
         #TODO go back on the API fetch until the trend equals the one in the last message
 
         last_trend = Trend.from_repr(last_mex)
-        found_idx = False
+        found_idx = None
         market_trends = focus_market.trend_list
 
         for idx, trend in enumerate(market_trends):
@@ -113,18 +113,23 @@ if __name__ == '__main__':
                 found_idx = idx
                 break
 
-        if found_idx:
+        if found_idx is not None:
             producer_log.info(f"writing the rest of missing messages")
-            producer_log.debug(f"{len(market_trends[-found_idx:])} - {market_trends[found_idx].to_repr()}")
+            producer_log.debug(f"{len(market_trends[:found_idx])} - starting trend: {market_trends[found_idx].to_repr()}")
 
-            missing_trends = market_trends[-found_idx:]
+            missing_trends = market_trends[1:found_idx] # skip most recent as it is still updating
         else:
             producer_log.info(f"No fetched message equals the last in the queue, writing all the elements")
-            missing_trends = market_trends
+            missing_trends = market_trends[1:] # skip most recent as it is still updating
 
-        for trend in reversed(missing_trends): #as it usually start from the latest to the oldest
-            producer_log.debug(f"{trend.to_repr()}")
+        for trend in reversed(missing_trends): # starting from the oldest, 
+            producer_log.debug(f"sending message: {trend.to_repr()}")
             k_producer.send(market_of_interest, trend.to_repr())
+        
+        producer_log.info(f"Flushing producer")
+        k_producer.flush()
+        producer_log.info(f"Closing producer")
+        k_producer.close()
 
 
 
