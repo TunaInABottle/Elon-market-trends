@@ -1,6 +1,6 @@
 import json 
 from kafka import KafkaConsumer, TopicPartition
-from setup_logger import fetch_log 
+from .config.setup_logger import fetch_log 
 
 if __name__ == '__main__':
     # Kafka Consumer 

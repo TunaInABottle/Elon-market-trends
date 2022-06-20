@@ -1,7 +1,7 @@
 from AbstractFetcher import Fetcher, FetcherCluster
 from Market import Market, MarketType, Trend, TrendBuilder
 from MessageData import MessageData
-from setup_logger import fetch_log
+from .config.setup_logger import fetch_log
 from typing import Dict, List, Type, TypeVar
 import requests
 
