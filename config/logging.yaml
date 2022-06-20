@@ -6,14 +6,14 @@ formatters:
   tuna_standard:
     format: "%(asctime)s | %(name)s:%(levelname)s | %(module)s:%(funcName)s | %(message)s"
   tuna_simple:
-    format: '%(asctime)s | %(name)s:%(levelname)s | %(module)s:%(funcName)s | %(message)s'
+    format: '%(levelname)s | %(module)s:%(funcName)s | %(message)s'
 
 
 
 handlers:
   console:
     class: logging.StreamHandler
-    level: DEBUG
+    level: WARNING
     formatter: tuna_simple
     stream: ext://sys.stdout
   info_handler:
@@ -41,8 +41,8 @@ loggers:
     handlers: [console]
     propagate: no
   fetchersLogger:
-    lefet: DEBUG
-    handlers: [info_handler]
+    level: DEBUG
+    handlers: [info_handler, console]
     propagate: no
 root:
   level: DEBUG

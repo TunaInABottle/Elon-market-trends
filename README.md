@@ -42,3 +42,9 @@ To run the code for testing, open the folder in VS Code, open a split Terminal a
 ## google docs:
 
 https://docs.google.com/document/d/12WIlLMl_l3vX2dv1bb3ZnQXg9orOfPYFRbv1ARFO-7A/edit
+
+
+## write on paper
+
+- As it is a dummy example, for the kafka topics we set up replication factor and partition equal to 1. In case of a deployment, it might be worth considering better number  so to improve robustness
+- Currently the fetching in Kafka's topics is based on an estimation of Elon Musk's Tweets per day multiplied by the number of days the model deems relevant for the computation. If this system would run for longer, it would be possible to get messages based on Kafka's offset thanks to the call https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html#kafka.KafkaConsumer.offsets_for_times
