@@ -2,7 +2,7 @@ import typing
 from kafka import KafkaProducer, KafkaConsumer, TopicPartition
 from setup_logger import producer_log
 import json
-import MessageData
+from MessageData import MessageData
 
 # TODO might be a class with only static methods so that the host is always the same
 

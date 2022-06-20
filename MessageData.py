@@ -30,3 +30,7 @@ class MessageData(ABC):
             An instantiated object with this type.
         """
         pass
+
+    @abstractmethod
+    def __eq__(self, other: 'MessageData') -> bool:
+        pass
