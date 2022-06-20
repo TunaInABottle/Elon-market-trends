@@ -123,6 +123,12 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return cluster
 
     def fetch_all(self) -> dict:
+        """
+        TODO write this
+        todos:
+            add waiting after modulo 5 fetch,
+            do not fetch STOCK market if current time not between american 4AM-8PM : https://www.alphavantage.co/documentation/
+        """
         ret_val = {}
 
         for key, fetcher in self._fetcher_dict.items():
@@ -131,4 +137,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return ret_val
 
     def add(self, fetcher: AlphavantageFetcher) -> None:
+        """
+        TODO write this
+        """
         self._fetcher_dict[fetcher.get_characteristics()] = fetcher

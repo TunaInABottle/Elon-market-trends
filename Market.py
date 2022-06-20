@@ -48,7 +48,7 @@ class Trend(MessageData):
     @staticmethod
     def from_repr(raw_data: dict) -> 'Trend':
         return Trend(
-            raw_data["datetime"],
+            parser.parse(raw_data["datetime"]),
             raw_data["open"],
             raw_data["high"],
             raw_data["low"],
