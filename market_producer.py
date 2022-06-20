@@ -95,7 +95,7 @@ def write_list_in_queue(topic: str, obj_list: list) -> None:
     producer.flush()
     producer.close()
 
-def ph_func(message: str, objType: MessageData, from_list: list, skip_latest: bool = True ) -> list:
+def filter_duplicates(message: str, objType: MessageData, from_list: list, skip_latest: bool = True ) -> list:
     """
     TODO
     """
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     if offset > 1:
         # Go back in market trends until it is found the trend equal the one in the queue
 
-        missing_trends = ph_func(message, Trend, fetched_trends)
+        missing_trends = filter_duplicates(message, Trend, fetched_trends)
 
                 
     else: # no message in the topic's partition
