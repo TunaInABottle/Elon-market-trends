@@ -30,8 +30,8 @@ Once you have your twitter API account, create a file `.env` and put your keys i
 API_KEY = your_key
 API_KEY_SECRET = your_key
 BEARER_TOKEN = your_key
-ACCESS_TOKEN= your_key
-ACCESS_TOKEN_SECRET= your_key
+ACCESS_TOKEN = your_key
+ACCESS_TOKEN_SECRET = your_key
 ```
 
 ### Run the code

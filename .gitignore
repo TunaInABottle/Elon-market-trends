@@ -14,3 +14,4 @@ sparkconsumer.py
 node_modules
 testing_grounds
 package-lock.json
+sources_*
