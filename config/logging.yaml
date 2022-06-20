@@ -3,9 +3,9 @@ version: 1
 
 
 formatters:
-  tuna_standard:
+  standard_frmt:
     format: "%(asctime)s | %(name)s:%(levelname)s | %(module)s:%(funcName)s | %(message)s"
-  tuna_simple:
+  simple_frmt:
     format: '%(levelname)s | %(module)s:%(funcName)s | %(message)s'
 
 
@@ -14,12 +14,12 @@ handlers:
   console:
     class: logging.StreamHandler
     level: WARNING
-    formatter: tuna_simple
+    formatter: simple_frmt
     stream: ext://sys.stdout
   info_handler:
     class: logging.handlers.RotatingFileHandler
     level: DEBUG
-    formatter: tuna_standard
+    formatter: standard_frmt
     filename: log/info.log
     maxBytes: 100000
     backupCount: 3
@@ -27,7 +27,7 @@ handlers:
   root_info_handler:
     class: logging.handlers.RotatingFileHandler
     level: INFO
-    formatter: tuna_standard
+    formatter: standard_frmt
     filename: log/root_info.log
     maxBytes: 100000
     backupCount: 3
@@ -41,6 +41,10 @@ loggers:
     handlers: [console]
     propagate: no
   fetchersLogger:
+    level: DEBUG
+    handlers: [info_handler, console]
+    propagate: no
+  producersLogger:
     level: DEBUG
     handlers: [info_handler, console]
     propagate: no

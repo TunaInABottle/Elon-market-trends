@@ -12,4 +12,5 @@ with open('./config/logging.yaml', 'r') as f:
 
 
 fetch_log = logging.getLogger("fetchersLogger")
+producer_log = logging.getLogger("producersLogger")
 

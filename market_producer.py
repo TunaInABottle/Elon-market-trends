@@ -3,14 +3,14 @@ import time
 from FetcherClusterFactory import FetcherClusterFactory
 from Market import Market, MarketType, Trend
 from MessageData import MessageData
-from setup_logger import fetch_log
+from setup_logger import producer_log
 from dotenv import load_dotenv
 from kafka import KafkaProducer, KafkaConsumer, TopicPartition
 import json
 import os
 load_dotenv(".env")
 
-fetch_log.info("New execution launched!")
+producer_log.info("New execution launched!")
 
 init_sources = {
     "AlphaVantage": {
@@ -30,6 +30,25 @@ init_sources = {
 ########
 
 
+def get_last_message(k_consumer: KafkaConsumer, which_topic: TopicPartition, last_offset: int) -> str:
+    # obtain last message
+    k_consumer.seek( which_topic, last_offset - 1 ) 
+
+    last_mex = None
+    for message in k_consumer:
+        last_mex = dict(json.loads(message.value)) #Trend.from_repr(dict(json.loads(message.value)))
+
+        if message.offset == last_offset - 1:
+            #exit the loop after obtaining the message
+            break
+    k_consumer.close()
+
+    producer_log.debug(f"last message in topic: {last_mex}")
+
+    return last_mex
+
+########
+
 if __name__ == '__main__':
 
     alphaCluster = FetcherClusterFactory.create("AlphaVantage", init_sources)
@@ -40,12 +59,12 @@ if __name__ == '__main__':
     print(markets)
 
     focus_market = markets['STOCK_TSLA'] #TODO API return from the latest to the oldest trend
-    fetch_log.debug(focus_market)
+    producer_log.debug(focus_market)
 
 
     ########
 
-    fetch_log.debug("Initialising Kafka producer")
+    producer_log.debug("Initialising Kafka producer")
     k_producer = KafkaProducer(
         bootstrap_servers = ['localhost:9092'],
         value_serializer = lambda x: json.dumps(x, indent=2).encode('utf-8')
@@ -59,7 +78,7 @@ if __name__ == '__main__':
     which_topic = TopicPartition(topic = 'TSLA_STOCK', partition = 0)
 
 
-    fetch_log.debug("Initialising Kafka consumer")
+    producer_log.debug("Initialising Kafka consumer")
     k_consumer = KafkaConsumer(
         bootstrap_servers='localhost:9092',
         auto_offset_reset='earliest',
@@ -72,25 +91,14 @@ if __name__ == '__main__':
     
     print(last_offset)
     if last_offset > 1:
-        k_consumer.seek( which_topic, last_offset - 1 ) # obtain last message
-
-        last_mex = None
-
-        for message in k_consumer:
-            print( dict(json.loads(message.value)) )
-            last_mex = Trend.from_repr(dict(json.loads(message.value)))
-
-
-            if message.offset == last_offset - 1:
-                break
-        k_consumer.close()
+        last_mex = get_last_message(which_topic, k_consumer, last_offset)
         
         #TODO go back on the API fetch until the trend equals the one in the last message
-        fetch_log.debug(f"Last message in queue {last_mex}")
+        producer_log.debug(f"Last message in queue {last_mex}")
     else:
         k_consumer.close()
-        fetch_log.info("No offset present, proceeding writing regularly")
+        producer_log.info("No offset present, proceeding writing regularly")
         for trend in reversed(focus_market.trend_list):
-            fetch_log.debug(f"{trend}, position {k_consumer.position(which_topic)}")
+            producer_log.debug(f"{trend}, position {k_consumer.position(which_topic)}")
             k_producer.send('TSLA_STOCK', trend.to_repr())
             time.sleep(3)
