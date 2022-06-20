@@ -5,7 +5,7 @@ import os
 from MessageData import MessageData
 import tweepy
 from AbstractFetcher import Fetcher
-from .config.setup_logger import fetch_log 
+from setup_logger import fetch_log 
 from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
 load_dotenv(".env")
 

@@ -4,7 +4,7 @@ from FetcherClusterFactory import FetcherClusterFactory
 import kafkaCustomProducer
 from Market import MarketType, Trend
 from MessageData import MessageData
-from .config.setup_logger import producer_log
+from setup_logger import producer_log
 from dotenv import load_dotenv
 import os
 load_dotenv(".env")

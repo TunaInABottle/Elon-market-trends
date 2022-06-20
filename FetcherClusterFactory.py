@@ -1,6 +1,6 @@
 from AbstractFetcher import FetcherCluster
 from AlphavantageAPI import AlphavantageFetcherCluster
-from .config.setup_logger import fetch_log
+from setup_logger import fetch_log
 from typing import Type
 
 class FetcherClusterFactory():

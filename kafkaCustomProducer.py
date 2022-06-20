@@ -1,6 +1,6 @@
 import typing
 from kafka import KafkaProducer, KafkaConsumer, TopicPartition
-from .config.setup_logger import producer_log
+from setup_logger import producer_log
 import json
 import MessageData
 
