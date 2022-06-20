@@ -1,7 +1,7 @@
-from shutil import which
+import typing
 import time
 from FetcherClusterFactory import FetcherClusterFactory
-from Market import Market, MarketType, Trend
+from Market import MarketType, Trend
 from MessageData import MessageData
 from setup_logger import producer_log
 from dotenv import load_dotenv
@@ -53,7 +53,80 @@ def get_last_message(k_consumer: KafkaConsumer, which_topic: TopicPartition, las
 
     return last_mex
 
+def last_message_topic(which_topic: TopicPartition) -> typing.Tuple[str, int]:
+    """
+    TODO
+    """
+    producer_log.debug("Initialising Kafka consumer")
+    consumer = KafkaConsumer(
+        bootstrap_servers='localhost:9092',
+        auto_offset_reset='latest'#,
+        #group_id = "piro"
+    )
+    consumer.assign([which_topic])
+
+    last_offset = consumer.position(which_topic)
+    last_mex = None
+
+    if last_offset > 1:
+        last_mex = get_last_message(consumer, which_topic, last_offset)
+    
+    consumer.close()
+    return last_mex, last_offset
+
+def write_list_in_queue(topic: str, obj_list: list) -> None:
+    """
+    TODO
+
+    Args:
+        obj_list: a list sorted from the most recent element to the oldest.
+    """
+    producer_log.debug("Initialising Kafka producer")
+    producer = KafkaProducer(
+        bootstrap_servers = ['localhost:9092'],
+        value_serializer = lambda x: json.dumps(x, indent=2).encode('utf-8')
+    )
+
+    for element in reversed(obj_list):
+        producer_log.debug(f"sending in \"{topic}\" message: {element.to_repr()}")
+        producer.send(topic, element.to_repr())
+
+    producer_log.info(f"Flushing and closing producer")
+    producer.flush()
+    producer.close()
+
+def ph_func(message: str, objType: MessageData, from_list: list, skip_latest: bool = True ) -> list:
+    """
+    TODO
+    """
+    last_queued_message = objType.from_repr(message)
+    found_idx = None
+    from_idx = None
+
+    if skip_latest:
+        from_idx = 1
+    else:
+        from_idx = 0
+
+
+    for idx, elem in enumerate(from_list):
+        if elem == last_queued_message:
+            producer_log.info(f"last message found in API call at index {idx}: {elem.to_repr()}")
+            found_idx = idx
+            break
+
+    if found_idx is not None:
+        producer_log.info(f"writing the rest of missing messages")
+        missing_elem = from_list[from_idx:found_idx] # skip most recent as it is still updating
+    else:
+        producer_log.info(f"No fetched message equals the last in the queue, writing all the elements")
+        missing_elem = from_list[from_idx:] # skip most recent as it is still updating
+
+    return missing_elem
+
 ########
+
+
 
 if __name__ == '__main__':
 
@@ -70,76 +143,22 @@ if __name__ == '__main__':
 
     ########
 
-    producer_log.debug("Initialising Kafka producer")
-    k_producer = KafkaProducer(
-        bootstrap_servers = ['localhost:9092'],
-        value_serializer = lambda x: json.dumps(x, indent=2).encode('utf-8')
-    )
-
-    #####
-
-    #@TODO function to get last message in queue
 
 
     which_topic = TopicPartition(topic = market_of_interest, partition = 0)
 
+    message, offset = last_message_topic(which_topic)
 
-    producer_log.debug("Initialising Kafka consumer")
-    k_consumer = KafkaConsumer(
-        bootstrap_servers='localhost:9092',
-        auto_offset_reset='latest',
-        group_id = "piro"
-    )
-    k_consumer.assign([which_topic])
+    fetched_trends = focus_market.trend_list
 
+    if offset > 1:
+        # Go back in market trends until it is found the trend equal the one in the queue
 
-    last_offset = k_consumer.position(which_topic)
-    
-    print(last_offset)
-    if last_offset > 1:
-        last_mex = get_last_message(k_consumer, which_topic, last_offset)
-        k_consumer.close()
-        
+        missing_trends = ph_func(message, Trend, fetched_trends)
 
-        #TODO go back on the API fetch until the trend equals the one in the last message
-
-        last_trend = Trend.from_repr(last_mex)
-        found_idx = None
-        market_trends = focus_market.trend_list
-
-        for idx, trend in enumerate(market_trends):
-            if trend == last_trend:
-                producer_log.info(f"last message found in API call at index {idx}: {trend.to_repr()}")
-                found_idx = idx
-                break
-
-        if found_idx is not None:
-            producer_log.info(f"writing the rest of missing messages")
-            producer_log.debug(f"{len(market_trends[:found_idx])} - starting trend: {market_trends[found_idx].to_repr()}")
-
-            missing_trends = market_trends[1:found_idx] # skip most recent as it is still updating
-        else:
-            producer_log.info(f"No fetched message equals the last in the queue, writing all the elements")
-            missing_trends = market_trends[1:] # skip most recent as it is still updating
-
-        for trend in reversed(missing_trends): # starting from the oldest, 
-            producer_log.debug(f"sending message: {trend.to_repr()}")
-            k_producer.send(market_of_interest, trend.to_repr())
-        
-        producer_log.info(f"Flushing producer")
-        k_producer.flush()
-        producer_log.info(f"Closing producer")
-        k_producer.close()
-
-
-
-
-
-
-    else: # no message in queue
-        k_consumer.close()
+                
+    else: # no message in the topic's partition
         producer_log.info("No offset present, proceeding writing all the data")
-        for trend in reversed(focus_market.trend_list):
-            producer_log.debug(f"{trend}, position {k_consumer.position(which_topic)}")
-            k_producer.send(market_of_interest, trend.to_repr())
-            time.sleep(3)
+        missing_trends = fetched_trends[1:] # skip most recent as it is still updating
+        
+    write_list_in_queue(market_of_interest, missing_trends)
