@@ -133,12 +133,15 @@ class AlphavantageFetcherCluster(FetcherCluster):
 
         return cluster
 
-    def fetch_all(self) -> dict:
+    def fetch_all(self) -> Dict[str, Market]:
         """Fetch from all the fetchers connected to this cluster.
 
         Todo:
             Find a way to make this computation parallelizable.
             do not fetch STOCK markets if current time not between american 4AM-8PM : https://www.alphavantage.co/documentation/
+
+        Returns:
+            A dictionary where for each key (a name of market) is associated its object representation.
         """
         ret_val = {}
 

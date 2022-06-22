@@ -32,10 +32,8 @@ if __name__ == '__main__':
 
     markets =  alphaCluster.fetch_all()
 
-    market_of_interest = 'CRYPTO_BTC'
 
-    focus_market = markets[market_of_interest]
-    producer_log.debug(focus_market)
-    producer_log.debug(f"First trend in the market: {focus_market.trend_list[0].to_repr()}")
+    for market_name, market_obj in markets.items():
+        producer_log.debug(f"First trend in the market \"{market_name}\": {market_obj.trend_list[0].to_repr()}")
 
-    kafkaCustomProducer.write_unique(topic = market_of_interest, read_partition = 0, list_elem = focus_market.trend_list, list_elem_type = Trend )
+        kafkaCustomProducer.write_unique(topic = market_name, read_partition = 0, list_elem = market_obj.trend_list, list_elem_type = Trend )
