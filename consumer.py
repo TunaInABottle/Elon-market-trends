@@ -2,7 +2,7 @@ import datetime
 import json
 import time
 from kafka import KafkaConsumer, TopicPartition
-from setup_logger import consumer_log 
+from config.setup_logger import consumer_log 
 from typing import Final
 
 HOUR_IN_MILLISEC: Final[int] =  60 * 60 * 1000

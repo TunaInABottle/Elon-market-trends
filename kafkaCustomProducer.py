@@ -1,6 +1,6 @@
 from typing import Type, Tuple
 from kafka import KafkaProducer, KafkaConsumer, TopicPartition
-from setup_logger import producer_log
+from config.setup_logger import producer_log
 import json
 from MessageData import MessageData
 import datetime
