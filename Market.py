@@ -140,3 +140,18 @@ class TrendBuilder:
             raw_data["5. volume"]
         )
 
+class MarketBuilder:
+    """Builder for instantiating new markets."""
+    @staticmethod
+    def from_alphaVantage_repr(market_name: str, market_type: MarketType, trend_list ) -> Market:
+        """Make a new Market object from an AlphaVantage request.
+
+        Args:
+            raw_data: a dictionary coming from a call to AlphaVantage API, needed to instantiate an object.
+
+        Returns:
+            An instantiated object.
+        """
+        market = Market(market_name, market_type)
+        market.add(trend_list)
+        return market

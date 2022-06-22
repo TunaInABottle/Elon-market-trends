@@ -1,5 +1,5 @@
 from AbstractFetcher import Fetcher, FetcherCluster
-from Market import Market, MarketType, Trend, TrendBuilder
+from Market import Market, MarketType, Trend, TrendBuilder, MarketBuilder
 from MessageData import MessageData
 from setup_logger import fetch_log
 from typing import Dict, List, Type, TypeVar
@@ -36,7 +36,7 @@ class AlphavantageFetcher(Fetcher):
         content = self._make_request()
 
         trends_list: List[Trend] = []
-        market = Market(self._market_name, self.market_type)
+        #market = Market(self._market_name, self.market_type)
 
         fetch_log.debug(content.keys())
 
@@ -53,7 +53,8 @@ class AlphavantageFetcher(Fetcher):
         for datetime, trend in movement_list.items():
             trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]
 
-        market.add(trends_list)
+        # market.add(trends_list)
+        market = MarketBuilder.from_alphaVantage_repr(self._market_name, self.market_type, trends_list)
         return market
 
     def _make_request(self):
@@ -72,6 +73,17 @@ class AlphavantageFetcher(Fetcher):
         return content
 
     def _request_type(self, market_type: MarketType) -> str:
+        """Define the string depending on the market.
+
+        Args:
+            market_type: on which market make the decision.
+        
+        Returns:
+            A string depending on the market.        
+
+        Raises:
+            KeyError if the market is not part of any of the expected ones.
+        """
         if market_type == MarketType.CRYPTO:
             return "CRYPTO"
         elif market_type == MarketType.STOCK:
@@ -137,7 +149,9 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return ret_val
 
     def add(self, fetcher: AlphavantageFetcher) -> None:
-        """
-        TODO write this
+        """Add a fetcher to this cluster.
+
+        Args:
+            fetcher: the fetcher to be added.
         """
         self._fetcher_dict[fetcher.get_characteristics()] = fetcher

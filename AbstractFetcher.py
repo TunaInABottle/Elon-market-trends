@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Type
+from typing import Dict, Type
 from typing import TypeVar
-from Market import Market
 
 from MessageData import MessageData
 
