@@ -8,16 +8,19 @@ from typing import Final
 HOUR_IN_MILLISEC: Final[int] =  60 * 60 * 1000
 
 def read_queue(topic_name: str, partition: int, last_n_messages: int = 0) -> list:
-    """Read messages from a Kafka queue.
+    """Read the last 'last_n_messages' messages from a Kafka topic.
 
     Args:
         topic_name: the name of Kafka's queue.
         partition: the number of the partition to read.
-        last_n_message: how many messages read from the latest, if 0 it will poll. default: 0
+        last_n_message: how many messages read from the latest, if 0 it will do polling. default: 0
+
+    Returns:
+        A list of the last 'last_n_messages' messages.
     """
     consumer = KafkaConsumer(
         bootstrap_servers='localhost:9092',
-        auto_offset_reset='earliest',
+        auto_offset_reset='latest',
         group_id = "my_horse_is_amazing"
     )
     topic = TopicPartition(topic = topic_name, partition = partition)
@@ -28,7 +31,7 @@ def read_queue(topic_name: str, partition: int, last_n_messages: int = 0) -> lis
     try:
         consumer.seek( topic, last_offset - last_n_messages ) # obtain the last n elements
     except AssertionError as ae:
-        consumer_log.warning(f"Tried to access an offset that is larger than the queue, fetching all the messages in the queue")
+        consumer_log.warning(f"Tried to access an offset that is larger than the queue, getting all the messages in the queue")
         consumer.seek_to_beginning()
 
     messages = []
@@ -45,9 +48,16 @@ def read_queue(topic_name: str, partition: int, last_n_messages: int = 0) -> lis
 
     return messages
 
-
 def read_queue_by_ts(topic_name: str, partition: int, last_millisec: int = 0) -> list:
-    """TODO
+    """Read the last messages in a Kafka topic published in 'last_millisec' milliseconds.
+
+    Args:
+        topic_name: the name of Kafka's queue.
+        partition: the number of the partition to read.
+        last_millisec: how many milliseconds will be subtracted from now. default: 0
+
+    Retuns:
+        A list with all the messages published within 'last_millisec' and now.
     """
 
     consumer = KafkaConsumer(
@@ -74,7 +84,7 @@ def read_queue_by_ts(topic_name: str, partition: int, last_millisec: int = 0) ->
         consumer_log.warning(f"Tried to access an offset that is larger than the queue, fetching all the messages in the queue")
         offset = consumer.seek_to_beginning().position(topic)
     except AttributeError as ae:
-        consumer_log.error(f"Tried to go before the beginning of the queue. {ae}")
+        consumer_log.error(f"{ae}")
         raise
 
 
@@ -90,7 +100,7 @@ def read_queue_by_ts(topic_name: str, partition: int, last_millisec: int = 0) ->
             break
     
     consumer.close()
-    print("Consumer has ended")
+    consumer_log.info("Consumer has ended")
 
     return messages
 
