@@ -1,3 +1,4 @@
+from time import sleep
 from AbstractFetcher import Fetcher, FetcherCluster
 from Market import Market, MarketType, Trend, TrendBuilder, MarketBuilder
 from MessageData import MessageData
@@ -36,9 +37,8 @@ class AlphavantageFetcher(Fetcher):
         content = self._make_request()
 
         trends_list: List[Trend] = []
-        #market = Market(self._market_name, self.market_type)
 
-        fetch_log.debug(content.keys())
+        fetch_log.debug(f"market: {self._market_name} keys: {content.keys()}")
 
         movement_list = None
         try:
@@ -53,7 +53,6 @@ class AlphavantageFetcher(Fetcher):
         for datetime, trend in movement_list.items():
             trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]
 
-        # market.add(trends_list)
         market = MarketBuilder.from_alphaVantage_repr(self._market_name, self.market_type, trends_list)
         return market
 
@@ -135,16 +134,22 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return cluster
 
     def fetch_all(self) -> dict:
-        """
-        TODO write this
-        todos:
-            add waiting after modulo 5 fetch,
-            do not fetch STOCK market if current time not between american 4AM-8PM : https://www.alphavantage.co/documentation/
+        """Fetch from all the fetchers connected to this cluster.
+
+        Todo:
+            Find a way to make this computation parallelizable.
+            do not fetch STOCK markets if current time not between american 4AM-8PM : https://www.alphavantage.co/documentation/
         """
         ret_val = {}
 
+        idx = 0
         for key, fetcher in self._fetcher_dict.items():
+            idx += 1
             ret_val[key] = fetcher.fetch()
+            if idx % 5 == 0: # API limitation: 5 request per minute
+                fetch_log.info(f"Too many requests for the API, idling for 1 minute")
+                sleep(60)
+
 
         return ret_val
 

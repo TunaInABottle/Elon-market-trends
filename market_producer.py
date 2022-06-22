@@ -14,11 +14,11 @@ producer_log.info("New execution launched!")
 init_sources = {
     "AlphaVantage": {
         "api_key": os.getenv('ALPHAVANTAGE_API_KEY'),
-        # MarketType.STOCK: {
-        #     "markets": ["IBM", "TSLA"]
-        # },
+        MarketType.STOCK: {
+            "markets": ["IBM", "TSLA"]
+        },
         MarketType.CRYPTO: { # full list of cryptos can be found here https://www.alphavantage.co/documentation/
-            "markets": ["BTC", "DOGE"]
+            "markets": ["BTC", "DOGE", "ETH", "ETC"]
         }
     },
     "Twitter": {
