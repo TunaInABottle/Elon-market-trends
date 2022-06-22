@@ -5,7 +5,7 @@ from kafka import KafkaConsumer, TopicPartition
 from setup_logger import consumer_log 
 from typing import Final
 
-HOUR_MILLISEC: Final[int] =  60 * 60 * 1000
+HOUR_IN_MILLISEC: Final[int] =  60 * 60 * 1000
 
 def read_queue(topic_name: str, partition: int, last_n_messages: int = 0) -> list:
     """Read messages from a Kafka queue.
@@ -100,14 +100,4 @@ if __name__ == '__main__':
     #messages = read_queue('CRYPTO_BTC', 0, last_n_messages = 20 )
     #consumer_log.debug( f"ara")
     
-    read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_MILLISEC )
-    
-    print( datetime.datetime.utcnow() )
-
-    print( datetime.datetime.utcfromtimestamp(  int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() )  ) )
-
-    print( datetime.datetime.utcfromtimestamp(0 * HOUR_MILLISEC / 1000 ) )
-
-    #messages = read_queue('CRYPTO_BTC', 0, last_n_messages = 0 )
-
-    
+    read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_IN_MILLISEC )

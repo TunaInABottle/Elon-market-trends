@@ -3,6 +3,7 @@ from kafka import KafkaProducer, KafkaConsumer, TopicPartition
 from setup_logger import producer_log
 import json
 from MessageData import MessageData
+import datetime
 
 # TODO might be a class with only static methods so that the host is always the same
 
@@ -65,12 +66,12 @@ def _write_list_in_queue(topic: str, obj_list: list) -> None:
 
     try:
         for element in reversed(obj_list):
-            iso_datetime = element.datetime
-            kafka_datetime = int(iso_datetime.astimezone(None).timestamp() * 1000)
-            producer_log.debug(f"sending in \"{topic}\" kafka_time {kafka_datetime} obj_time {iso_datetime} message: {element.to_repr()}")
-            producer.send(topic, element.to_repr(), timestamp_ms = kafka_datetime ) #TODO timestamp is converted from local to UTC while it is already UTC
+            kafka_ts = int((element.datetime - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+            producer_log.debug(f"sending in \"{topic}\" ts {kafka_ts} message: {element.to_repr()}")
+            producer.send(topic, element.to_repr(), timestamp_ms = kafka_ts ) 
+    
     except AttributeError:
-        producer_log.warning("The list of elements fed to the producer has no datetime attribute, writing no timestamp")
+        producer_log.warning("The list of elements fed to the producer has no \"datetime\" attribute, writing no timestamp")
         for element in reversed(obj_list):
             producer_log.debug(f"sending in \"{topic}\" message: {element.to_repr()}")
             producer.send(topic, element.to_repr() )
