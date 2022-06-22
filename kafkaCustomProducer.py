@@ -63,9 +63,17 @@ def _write_list_in_queue(topic: str, obj_list: list) -> None:
         value_serializer = lambda x: json.dumps(x, indent=2).encode('utf-8')
     )
 
-    for element in reversed(obj_list):
-        producer_log.debug(f"sending in \"{topic}\" message: {element.to_repr()}")
-        producer.send(topic, element.to_repr())
+    try:
+        for element in reversed(obj_list):
+            iso_datetime = element.datetime
+            kafka_datetime = int(iso_datetime.astimezone(None).timestamp() * 1000)
+            producer_log.debug(f"sending in \"{topic}\" kafka_time {kafka_datetime} obj_time {iso_datetime} message: {element.to_repr()}")
+            producer.send(topic, element.to_repr(), timestamp_ms = kafka_datetime ) #TODO timestamp is converted from local to UTC while it is already UTC
+    except AttributeError:
+        producer_log.warning("The list of elements fed to the producer has no datetime attribute, writing no timestamp")
+        for element in reversed(obj_list):
+            producer_log.debug(f"sending in \"{topic}\" message: {element.to_repr()}")
+            producer.send(topic, element.to_repr() )
 
     producer_log.info(f"Flushing and closing producer")
     producer.flush()
