@@ -1,5 +1,3 @@
-import typing
-import time
 from FetcherClusterFactory import FetcherClusterFactory
 import kafkaCustomProducer
 from Market import MarketType, Trend
@@ -18,7 +16,7 @@ init_sources = {
             "markets": ["IBM", "TSLA"]
         },
         MarketType.CRYPTO: { # full list of cryptos can be found here https://www.alphavantage.co/documentation/
-            "markets": ["BTC", "DOGE", "ETH", "ETC"]
+            "markets": ["BTC", "DOGE"]#, "ETH", "ETC"]
         }
     },
     "Twitter": {
@@ -38,7 +36,6 @@ if __name__ == '__main__':
 
     focus_market = markets[market_of_interest]
     producer_log.debug(focus_market)
-    producer_log.debug(focus_market.trend_list[0].to_repr())
-
+    producer_log.debug(f"First trend in the market: {focus_market.trend_list[0].to_repr()}")
 
     kafkaCustomProducer.write_unique(topic = market_of_interest, read_partition = 0, list_elem = focus_market.trend_list, list_elem_type = Trend )

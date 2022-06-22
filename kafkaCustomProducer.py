@@ -136,6 +136,10 @@ def write_unique(topic: str, read_partition = int, list_elem = Type[list], list_
         list_elem_type: of which instance are the Objects in 'list_elem'. TODO can be omitted?
         skip_latest: should the first message in 'list_elem' be skipped? Default True
     """
+    if True in ( not isinstance( el, MessageData ) for el in list_elem):
+        producer_log.error("\"list_elem\" passed has elements that are not instances of MessageData ")
+        raise TypeError
+
     which_topic = TopicPartition(topic = topic, partition = read_partition)
 
     message, offset = _last_message_in_topic(which_topic)
