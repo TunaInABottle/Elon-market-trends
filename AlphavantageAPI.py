@@ -24,6 +24,7 @@ class AlphavantageFetcher(Fetcher):
         self.market_type = market_type #: Type of market
         self._url_type_req = self._request_type(market_type)
         self._market_name = market_name
+        self._timespan = "30min"
         fetch_log.info(f"istantiated: {market_type} - {market_name}")
 
     def fetch(self) -> Market:
@@ -42,9 +43,9 @@ class AlphavantageFetcher(Fetcher):
         movement_list = None
         try:
             if self.market_type == MarketType.CRYPTO:
-                movement_list = content['Time Series Crypto (30min)']
+                movement_list = content['Time Series Crypto (' + self._timespan + ')']
             else: #stock market
-                movement_list = content['Time Series (30min)']
+                movement_list = content['Time Series (' + self._timespan + ')']
         except KeyError as ke:
             fetch_log.error(f"there is no time series key in here: {content}\n {ke}")
 
@@ -59,7 +60,7 @@ class AlphavantageFetcher(Fetcher):
         data = requests.get( 
             'https://www.alphavantage.co/query?function=' + self._url_type_req + 
             '_INTRADAY&symbol=' + self._market_name + 
-            '&market=USD&interval=30min&outputsize=full&apikey=' + self._api_key )
+            '&market=USD&interval=' + self._timespan + '&outputsize=full&apikey=' + self._api_key )
 
         content = data.json()
 
