@@ -5,8 +5,6 @@ from kafka import KafkaConsumer, TopicPartition
 from config.setup_logger import consumer_log 
 from typing import Final
 
-from pyspark.sql import SparkSession
-
 
 HOUR_IN_MILLISEC: Final[int] =  60 * 60 * 1000
 
@@ -134,30 +132,5 @@ def read_queue_by_ts(topic_name: str, partition: int, last_millisec: int = 0) ->
 #         .start()
 
 #     print(query)
-
-## first spark attempt
-if __name__ == '__main__':
-    #messages = read_queue('CRYPTO_BTC', 0, last_n_messages = 20 )
-    #consumer_log.debug( f"ara")
-    
-    dataf =  read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_IN_MILLISEC ) 
-
-    datat = read_queue_by_ts('pizza', 0, 3 * HOUR_IN_MILLISEC )
-
-    spark = SparkSession \
-        .builder \
-        .appName("Python Spark SQL basic example") \
-        .master("local[2]") \
-        .getOrCreate()
-
-    # print([(value['datetime'],) for value in dataf])
-
-    dft = spark.createDataFrame([(value['id'], value['datetime'], value['text'], value['retweets']) for value in datat], ['id', 'datetime', 'text', 'retweets'])
-
-    dft.show()
-
-    df = spark.createDataFrame([(value['datetime'], value['open'], value['close'], value['high'], value['low']) for value in dataf], ['datetime', 'open', 'close', 'high', 'low'])
-
-    df.show()
 
     
