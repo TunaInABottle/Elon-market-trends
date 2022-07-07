@@ -149,6 +149,8 @@ if __name__ == '__main__':
         .master("local[2]") \
         .getOrCreate()
 
-    df = spark.createDataFrame([(value,) for value in dataf], ['id'])
+    # print([(value['datetime'],) for value in dataf])
+
+    df = spark.createDataFrame([(value['datetime'], value['open'], value['close'], value['high'], value['low']) for value in dataf], ['datatime', 'open', 'close', 'high', 'low'])
 
     df.show()
