@@ -1,4 +1,4 @@
-from typing import Type, Tuple
+from typing import Type, Tuple, List
 from kafka import KafkaProducer, KafkaConsumer, TopicPartition
 from config.setup_logger import producer_log
 import json
@@ -26,7 +26,7 @@ def _last_message_in_topic(which_topic: TopicPartition) -> Tuple[str, int]:
 
     last_offset = consumer.position(which_topic)
     last_mex = None
-
+    producer_log.debug(f"offset found at {last_offset}")
     if last_offset > 1:
         last_mex = _get_message(consumer, which_topic, last_offset)
     
@@ -46,12 +46,15 @@ def _get_message(k_consumer: KafkaConsumer, which_topic: TopicPartition, offset:
     Raises:
         Error if client is not subscribed to `which_topic`
     """
+
+    producer_log.debug(f"seeking message")
     k_consumer.seek( which_topic, offset - 1 ) 
+    producer_log.debug(f"seek successful")
 
     mex = None
     for message in k_consumer:
         mex = dict(json.loads(message.value))
-
+        producer_log.debug(f"{mex}")
         if message.offset == offset - 1:
             #exit the loop after obtaining the message
             break
@@ -126,7 +129,7 @@ def _filter_duplicates(message: str, objType: MessageData, from_list: list, skip
 
     return missing_elem
 
-def write_unique(topic: str, read_partition = int, list_elem = Type[list], list_elem_type = MessageData, skip_latest = True ) -> None:
+def write_unique(topic: str, read_partition = int, list_elem = List[MessageData], list_elem_type = MessageData, skip_latest = True ) -> None:
     """ Writes messages in a Kafka topic, avoiding duplicates by looking at the last message in the queue.
 
     Args:
@@ -144,7 +147,6 @@ def write_unique(topic: str, read_partition = int, list_elem = Type[list], list_
 
     message, offset = _last_message_in_topic(which_topic)
 
-    list_elem = list_elem
 
     if offset > 1:
         # Go back until it is found the trend equal the one in the queue

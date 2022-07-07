@@ -5,6 +5,9 @@ from kafka import KafkaConsumer, TopicPartition
 from config.setup_logger import consumer_log 
 from typing import Final
 
+from pyspark.sql import SparkSession
+
+
 HOUR_IN_MILLISEC: Final[int] =  60 * 60 * 1000
 
 def read_queue(topic_name: str, partition: int, last_n_messages: int = 0) -> list:
@@ -105,9 +108,47 @@ def read_queue_by_ts(topic_name: str, partition: int, last_millisec: int = 0) ->
     return messages
 
 
+# if __name__ == '__main__':
+#     dataf =  read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_IN_MILLISEC ) 
 
+#     spark = SparkSession \
+#         .builder \
+#         .appName("Python Spark SQL basic example") \
+#         .getOrCreate()
+
+
+#     df = spark \
+#         .readStream \
+#         .format("kafka") \
+#         .option("kafka.bootstrap.servers", "localhost:9092") \
+#         .option("subscribe", "CRYPTO_BTC") \
+#         .option("startingOffsets", "earliest") \
+#         .load()
+
+#     df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+
+#     query = df \
+#         .writeStream \
+#         .outputMode("update") \
+#         .format("console") \
+#         .start()
+
+#     print(query)
+
+## first spark attempt
 if __name__ == '__main__':
     #messages = read_queue('CRYPTO_BTC', 0, last_n_messages = 20 )
     #consumer_log.debug( f"ara")
     
-    read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_IN_MILLISEC )
+    dataf =  read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_IN_MILLISEC ) 
+
+
+    spark = SparkSession \
+        .builder \
+        .appName("Python Spark SQL basic example") \
+        .master("local[2]") \
+        .getOrCreate()
+
+    df = spark.createDataFrame([(value,) for value in dataf], ['id'])
+
+    df.show()
