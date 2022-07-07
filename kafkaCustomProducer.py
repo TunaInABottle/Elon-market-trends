@@ -7,7 +7,7 @@ import datetime
 
 # TODO might be a class with only static methods so that the host is always the same
 
-def _last_message_in_topic(which_topic: TopicPartition) -> Tuple[str, int]:
+def last_message_in_topic(which_topic: TopicPartition) -> Tuple[str, int]:
     """Get the last message of a TopicPartition.
 
     Args:
@@ -31,7 +31,7 @@ def _last_message_in_topic(which_topic: TopicPartition) -> Tuple[str, int]:
         last_mex = _get_message(consumer, which_topic, last_offset)
     
     consumer.close()
-    return last_mex, last_offset
+    return last_mex#, last_offset
 
 def _get_message(k_consumer: KafkaConsumer, which_topic: TopicPartition, offset: int) -> str:
     """Obtain the `offset` message in a TopicPartition.
@@ -145,10 +145,12 @@ def write_unique(topic: str, read_partition = int, list_elem = List[MessageData]
 
     which_topic = TopicPartition(topic = topic, partition = read_partition)
 
-    message, offset = _last_message_in_topic(which_topic)
+    #message, offset = last_message_in_topic(which_topic)
+    message = last_message_in_topic(which_topic)
 
 
-    if offset > 1:
+    #if offset > 1:
+    if message is not None:
         # Go back until it is found the trend equal the one in the queue
         missing_messages = _filter_duplicates(message, list_elem_type, list_elem, skip_latest = skip_latest)
     else: # no message in the topic's partition
