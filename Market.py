@@ -1,6 +1,8 @@
 from datetime import datetime, tzinfo
 from datetime import timezone
 
+import pytz
+
 from MessageData import MessageData
 import typing
 from typing import List
@@ -131,8 +133,13 @@ class TrendBuilder:
         Returns:
             An instantiated object.
         """
+        est_datetime = parser.parse(datetime).replace(tzinfo=pytz.timezone('US/Eastern'))
+        utc_datetime = est_datetime.astimezone(pytz.utc)
+        # print(f"before {est_datetime.isoformat()}")
+        # print(f"after {est_datetime.astimezone(pytz.utc)}")
+
         return Trend(
-            parser.parse(datetime),
+            utc_datetime, #parser.parse(datetime),
             raw_data["1. open"],
             raw_data["2. high"],
             raw_data["3. low"],

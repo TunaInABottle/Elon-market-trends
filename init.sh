@@ -15,10 +15,10 @@ activate
 
 # install all the packages
 echo "Installing packages from requirements"
-pip install -r requirement.txt
+pip install -r requirements.txt
 
 
 echo "imma don"
 
 
-# to save current python packages use pip freeze > requirement.txt
+# to save current python packages use pip freeze > requirements.txt
