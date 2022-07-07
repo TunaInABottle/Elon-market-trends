@@ -142,6 +142,7 @@ if __name__ == '__main__':
     
     dataf =  read_queue_by_ts('CRYPTO_BTC', 0, 3 * HOUR_IN_MILLISEC ) 
 
+    datat = read_queue_by_ts('pizza', 0, 3 * HOUR_IN_MILLISEC )
 
     spark = SparkSession \
         .builder \
@@ -151,6 +152,12 @@ if __name__ == '__main__':
 
     # print([(value['datetime'],) for value in dataf])
 
-    df = spark.createDataFrame([(value['datetime'], value['open'], value['close'], value['high'], value['low']) for value in dataf], ['datatime', 'open', 'close', 'high', 'low'])
+    dft = spark.createDataFrame([(value['id'], value['datetime'], value['text'], value['retweets']) for value in datat], ['id', 'datetime', 'text', 'retweets'])
+
+    dft.show()
+
+    df = spark.createDataFrame([(value['datetime'], value['open'], value['close'], value['high'], value['low']) for value in dataf], ['datetime', 'open', 'close', 'high', 'low'])
 
     df.show()
+
+    
