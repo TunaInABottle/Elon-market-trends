@@ -22,3 +22,5 @@ echo "imma don"
 
 
 # to save current python packages use pip freeze > requirements.txt
+
+python market_producer.py

@@ -4,6 +4,7 @@ from Market import Market, MarketType, Trend, TrendBuilder, MarketBuilder
 from config.setup_logger import fetch_log
 from typing import Dict, List, Type, TypeVar
 import requests
+from ProducerException import APILimitError
 
 T = TypeVar("T", bound="AlphavantageFetcherCluster")
 
@@ -25,7 +26,7 @@ class AlphavantageFetcher(Fetcher):
         self._url_type_req = self._request_type(market_type)
         self._market_name = market_name
         self._timespan = "30min"
-        fetch_log.info(f"istantiated: {market_type} - {market_name}")
+        fetch_log.info(f"istantiated fetcher: {market_type} - {market_name}")
 
     def fetch(self) -> Market:
         """Fetch information from the Endpoint.
@@ -48,7 +49,7 @@ class AlphavantageFetcher(Fetcher):
                 movement_list = content['Time Series (' + self._timespan + ')']
         except KeyError as ke:
             fetch_log.error(f"there is no time series key in here: {content}\n {ke}")
-
+            raise APILimitError
 
         for datetime, trend in movement_list.items():
             trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]
@@ -134,25 +135,26 @@ class AlphavantageFetcherCluster(FetcherCluster):
         return cluster
 
     def fetch_all(self) -> Dict[str, Market]:
-        """Fetch from all the fetchers connected to this cluster.
+        """Fetch from all the fetchers connected to this cluster, pausing when the API limit is reached.
 
         Todo:
             Find a way to make this computation parallelizable.
-            do not fetch STOCK markets if current time not between american 4AM-8PM : https://www.alphavantage.co/documentation/
+            efficiency: do not fetch STOCK markets if current time not between american 4AM-8PM : https://www.alphavantage.co/documentation/
 
         Returns:
             A dictionary where for each key (a name of market) is associated its object representation.
         """
         ret_val = {}
 
-        idx = 0
         for key, fetcher in self._fetcher_dict.items():
-            idx += 1
-            ret_val[key] = fetcher.fetch()
-            if idx % 5 == 0: # API limitation: 5 request per minute
-                fetch_log.info(f"Too many requests for the API, idling for 1 minute")
-                sleep(60)
-
+            successful = False
+            while not successful: 
+                try:
+                    ret_val[key] = fetcher.fetch()
+                    successful = True
+                except APILimitError:
+                    fetch_log.info(f"Too many requests for the API, idling for 1 minute")
+                    sleep(60)
 
         return ret_val
 

@@ -15,7 +15,7 @@ init_sources = {
             "markets": ["IBM", "TSLA"]
         },
         MarketType.CRYPTO: { # full list of cryptos can be found here https://www.alphavantage.co/documentation/
-            "markets": ["BTC", "DOGE"]#, "ETH", "ETC"]
+            "markets": ["BTC", "DOGE", "ETH", "ETC"]
         }
     },
     "Twitter": {
@@ -26,6 +26,8 @@ init_sources = {
 
 
 if __name__ == '__main__':
+
+    print("horray")
 
     alphaCluster = FetcherClusterFactory.create("AlphaVantage", init_sources)
 
