@@ -78,7 +78,8 @@ def _write_list_in_queue(topic: str, obj_list: list) -> None:
 
     try:
         for element in reversed(obj_list):
-            kafka_ts = int((element.datetime - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+            kafka_ts = int((element.datetime - datetime.datetime(1970, 1, 1,tzinfo=datetime.timezone.utc)).total_seconds() * 1000)
+            #kafka_ts = int((element.datetime - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
             producer_log.debug(f"sending in \"{topic}\" ts {kafka_ts} message: {element.to_repr()}")
             producer.send(topic, element.to_repr(), timestamp_ms = kafka_ts ) 
     

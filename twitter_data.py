@@ -6,7 +6,7 @@ from MessageData import MessageData
 import tweepy
 from AbstractFetcher import Fetcher
 from config.setup_logger import fetch_log 
-from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
+from dotenv import load_dotenv
 load_dotenv(".env")
 import datetime
 import dateutil.parser as parser
@@ -14,14 +14,14 @@ import dateutil.parser as parser
 class Tweet(MessageData):
     def __init__(self, id: str, datetime: datetime, text: str, retweets: int) -> None:
         self.id = id
-        self.datetime = datetime.isoformat()
+        self.datetime = datetime#.isoformat()
         self.text = text
         self.retweets = retweets
 
     def to_repr(self) -> dict:
         return {
             "id": self.id,
-            "datetime": self.datetime, 
+            "datetime": str(self.datetime), 
             "text": self.text, 
             "retweets": self.retweets
             }
@@ -33,7 +33,6 @@ class Tweet(MessageData):
             parser.parse(raw_data["datetime"]),
             raw_data["text"],
             raw_data["retweets"]
-
         )
 
     def __eq__(self, other: 'Tweet') -> bool:
