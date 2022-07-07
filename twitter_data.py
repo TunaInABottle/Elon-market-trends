@@ -8,19 +8,20 @@ from AbstractFetcher import Fetcher
 from config.setup_logger import fetch_log 
 from dotenv import load_dotenv # WHY DOES THIS NOT WORK HUH?
 load_dotenv(".env")
-
+import datetime
+import dateutil.parser as parser
 
 class Tweet(MessageData):
-    def __init__(self, id: str, creation_time: str, text: str, retweets: int) -> None:
+    def __init__(self, id: str, datetime: datetime, text: str, retweets: int) -> None:
         self.id = id
-        self.creation_time = creation_time
+        self.datetime = datetime.isoformat()
         self.text = text
         self.retweets = retweets
 
     def to_repr(self) -> dict:
         return {
             "id": self.id,
-            "creation_time": self.creation_time, 
+            "datetime": self.datetime, 
             "text": self.text, 
             "retweets": self.retweets
             }
@@ -29,9 +30,10 @@ class Tweet(MessageData):
     def from_repr(raw_data: dict) -> 'Tweet':
         return Tweet(
             raw_data["id"],
-            raw_data["creation_time"],
+            parser.parse(raw_data["datetime"]),
             raw_data["text"],
             raw_data["retweets"]
+
         )
 
     def __eq__(self, other: 'Tweet') -> bool:
@@ -53,7 +55,7 @@ class TweetBuilder:
         """
         return Tweet(
             raw_data.id,
-            str(raw_data.created_at),
+            raw_data.created_at,
             raw_data.full_text,
             raw_data.retweet_count
         )
@@ -97,9 +99,7 @@ class TwitterFetcher(Fetcher):
         NewTweets= TweetFeed()
 
         for tweet in tweets:
-            if isinstance(tweet, dict):
-                print("!!!")
-                NewTweets.add( TweetBuilder.from_tweepy_repr( tweet ) )
+            NewTweets.add( TweetBuilder.from_tweepy_repr( tweet ) )
         return NewTweets
         
 
