@@ -12,6 +12,6 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_CREATE_TOPICS: "CRYPTO_BTC:1:2,pizza:1:2:"
+      KAFKA_CREATE_TOPICS: "STOCK_IBM:1:2,CRYPTO_BTC:1:2,pizza:1:2:"
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181

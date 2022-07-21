@@ -48,8 +48,8 @@ class AlphavantageFetcher(Fetcher):
             else: #stock market
                 movement_list = content['Time Series (' + self._timespan + ')']
         except KeyError as ke:
-            fetch_log.error(f"there is no time series key in here: {content}\n {ke}")
-            raise APILimitError
+            #fetch_log.error(f"there is no time series key in here: {content}\n {ke}")
+            raise APILimitError(f"there is no time series key in here: {content}\n {ke}")
 
         for datetime, trend in movement_list.items():
             trends_list = trends_list + [TrendBuilder.from_alphaVantage_repr(trend, datetime)]
@@ -155,6 +155,7 @@ class AlphavantageFetcherCluster(FetcherCluster):
                 except APILimitError:
                     fetch_log.info(f"Too many requests for the API, idling for 1 minute")
                     sleep(60)
+                    fetch_log.info(f"Resuming...")
 
         return ret_val
 
