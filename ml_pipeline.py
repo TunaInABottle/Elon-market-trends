@@ -61,6 +61,11 @@ if __name__ == '__main__':
     # # Fit the pipeline to training documents.
     model = pipeline.fit(dft)
 
+
+    ### #### ###
+    ### TODO ###
+    # write the large market movement in the df, for each tweet and market
+
     # ######################################################################
 
     # test = spark.createDataFrame([(value['id'], value['datetime'], value['text']) for value in datat[-1]], ['id', 'datetime', 'text'])
