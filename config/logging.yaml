@@ -48,6 +48,10 @@ loggers:
     level: DEBUG
     handlers: [info_handler, console]
     propagate: no
+  modelLogger:
+    level: DEBUG
+    handlers: [info_handler, console]
+    propagate: no
   consumersLogger:
     level: DEBUG
     handlers: [info_handler, console]
