@@ -95,7 +95,7 @@ class TwitterFetcher(Fetcher):
                                         include_rts = True, tweet_mode='extended')
 
         #Instantiate the empty class that collects the tweet in here
-        NewTweets= TweetFeed()
+        NewTweets = TweetFeed()
 
         for tweet in tweets:
             NewTweets.add( TweetBuilder.from_tweepy_repr( tweet ) )

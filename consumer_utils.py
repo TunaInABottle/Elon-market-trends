@@ -94,7 +94,7 @@ def read_queue_by_ts(topic_name: str, partition: int, last_millisec: int = 0) ->
     messages = []
 
     for message in consumer:
-        consumer_log.debug( f"reading from {message.topic} offset {message.offset} timestamp {datetime.datetime.utcfromtimestamp(message.timestamp / 1000) } value {json.loads(message.value)}")
+        consumer_log.info( f"reading from {message.topic} offset {message.offset} timestamp {datetime.datetime.utcfromtimestamp(message.timestamp / 1000) } value {json.loads(message.value)}")
         messages.append( json.loads(message.value ) )
 
         if message.offset == last_offset - 1:
