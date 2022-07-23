@@ -6,6 +6,9 @@ from pyspark.ml.regression import LinearRegression
 from pyspark.ml.feature import HashingTF, Tokenizer
 from consumer_utils import read_queue, read_queue_by_ts, HOUR_IN_MILLISEC
 
+### TODO ###
+### try-catch as consumer is trying to get data of missing time serier as producer felt behind
+
 ## first spark attempt using MLib pipeline
 if __name__ == '__main__':
     #messages = read_queue('CRYPTO_BTC', 0, last_n_messages = 20 )

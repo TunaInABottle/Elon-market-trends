@@ -91,7 +91,7 @@ class TwitterFetcher(Fetcher):
     def fetch(self, given_id) -> TweetFeed:
         '''returns list of dictionaries with the twitter data'''
 
-        tweets = self._api.user_timeline(id=given_id, count=10, # 200 is the maximum allowed count
+        tweets = self._api.user_timeline(id=given_id, count=100, # 200 is the maximum allowed count
                                         include_rts = True, tweet_mode='extended')
 
         #Instantiate the empty class that collects the tweet in here
