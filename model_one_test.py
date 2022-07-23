@@ -52,7 +52,7 @@ def get_market_data(sparksession, mkt_name):
     return s_market
 
 def get_tweet_data(sparksession):
-    datat = read_queue_by_ts('pizza', 0, 48 * HOUR_IN_MILLISEC )
+    datat = read_queue_by_ts('TWEETS', 0, 48 * HOUR_IN_MILLISEC )
 
     s_tweet = sparksession.createDataFrame([(value['id'], value['datetime'], value['text'], value['retweets']) for value in datat[:-1]], ['id', 'datetime', 'text', 'retweets'])
     
@@ -63,14 +63,13 @@ def get_tweet_data(sparksession):
                     ).withColumn("row_idx",
                                  F.monotonically_increasing_id() )
 
-    s_tweet = s_tweet.filter(
-            F.col("datetime").between(
-                "2022-07-22 0:18:00", #from
-                F.expr("current_timestamp"),
-                #"2022-07-22 15:18:00" + F.expr("+ interval 7 hours"), #to
-            )
-            ).withColumn("row_idx", F.monotonically_increasing_id())
-    s_tweet.show()
+    # s_tweet = s_tweet.filter(
+    #         F.col("datetime").between(
+    #             "2022-07-22 0:18:00", #from
+    #             F.expr("current_timestamp"),
+    #             #"2022-07-22 15:18:00" + F.expr("+ interval 7 hours"), #to
+    #         )
+    #         )
 
     return s_tweet
 
@@ -114,8 +113,8 @@ if __name__ == '__main__':
     hashingTF = HashingTF(inputCol=tokenizer.getOutputCol(), outputCol="features").setNumFeatures(150)
     lin_mod1 =  LinearRegression(featuresCol="features", labelCol="retweets", regParam = 0.01) # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html
     
-    lin_mod2 =  LinearRegression(featuresCol="features", labelCol="crypto_btc_var|", regParam = 0.01) # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html
-    pipeline = Pipeline(stages=[tokenizer, hashingTF, lin_mod1, lin_mod2])
+    #lin_mod2 =  LinearRegression(featuresCol="features", labelCol="crypto_btc_var", regParam = 0.01) # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.LinearRegression.html
+    pipeline = Pipeline(stages=[tokenizer, hashingTF, lin_mod1])
 
     # # Fit the pipeline to training documents.
     model = pipeline.fit(s_tweet)

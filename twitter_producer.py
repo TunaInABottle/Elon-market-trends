@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # Infinite loop - runs until you kill the program
     elon_tweets = twitterFetcher.fetch(given_id)
     #updated to custom Producer class
-    kafkaCustomProducer.write_unique(topic = 'pizza', read_partition = 0, list_elem = elon_tweets.tweets, list_elem_type = twitter_data.Tweet, skip_latest=False )
+    kafkaCustomProducer.write_unique(topic = 'TWEETS', read_partition = 0, list_elem = elon_tweets.tweets, list_elem_type = twitter_data.Tweet, skip_latest=False )
 
     # for tweet in elon_tweets.tweets:
     #     #fetch_log.info(f'Producing message @ {datetime.now()} | Message = {str(tweet.to_repr())}')
