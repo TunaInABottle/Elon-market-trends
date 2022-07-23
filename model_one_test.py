@@ -94,8 +94,15 @@ if __name__ == '__main__':
 
     s_tweet = get_tweet_data(spark, hour_offset)
 
+
+    tokenizer = Tokenizer(inputCol="text", outputCol="words")
+    s_tweet = tokenizer.transform(s_tweet)
+    hashingTF = HashingTF(inputCol="words", outputCol="features").setNumFeatures(150)
+    s_tweet = hashingTF.transform(s_tweet)
+
     consumer_log.info("computing BTC variation according to tweets")
-    for market_name in ["CRYPTO_BTC"]: # , "CRYPTO_DOGE", "STOCK_TSLA"
+    market_fluct_dict = {}
+    for market_name in ["CRYPTO_BTC", "CRYPTO_DOGE", "STOCK_TSLA"]: # , "CRYPTO_DOGE", "STOCK_TSLA"
 
         s_market = get_market_data(spark, market_name, hour_offset) 
 
@@ -105,32 +112,31 @@ if __name__ == '__main__':
         for row in s_tweet.collect(): # rowwise operaion does not work with function variables outside dataframe
             mkt_fluctuation.append( (row["row_idx"], market_fluctuation(s_market, row["datetime"], 3, 30)) )
 
-        market_variation = spark.createDataFrame([(value[0], float(value[1])) for value in mkt_fluctuation], ['row_idx', f'{market_name.lower()}_var'])
+        market_col_name = f'{market_name.lower()}_var'
+        market_variation = spark.createDataFrame([(value[0], float(value[1])) for value in mkt_fluctuation], ['row_idx', market_col_name])
 
         s_tweet = s_tweet.join(market_variation, on = "row_idx", how = "left")
 
+        train_data = spark.createDataFrame(s_tweet.tail(s_tweet.count()-1), s_tweet.schema)
+        #train_data.show()
+        
+        test_data = spark.createDataFrame(s_tweet.take(1))
+        #test_data.show()
 
-    s_tweet.show()
-    ### LM training ###
+        ss = LinearRegression(featuresCol='features', labelCol = market_col_name, regParam = 0.01)
+        ss = ss.fit(train_data)
+        pred = ss.evaluate(test_data)
+        #pred.predictions.show()
 
-
-    tokenizer = Tokenizer(inputCol="text", outputCol="words")
-    ph = tokenizer.transform(s_tweet)
-    hashingTF = HashingTF(inputCol="words", outputCol="features").setNumFeatures(150)
-    ph = hashingTF.transform(ph)
-
-    ph.show()
-
-    ss = LinearRegression(featuresCol='features', labelCol='crypto_btc_var')
-    ss.fit(ph)
+        market_fluct_dict[market_col_name] = pred.predictions.first()["prediction"]
 
 
-    test_data = ph.take(2)
-    ph.show()
-    test_data.show()
+    print(market_fluct_dict)
+    #s_tweet.show()
 
-    # pred = ss.evaluate(test_data)
-    # pred.predictions.show()
+
+
+
 
     # # Configure an ML pipeline, which consists of three stages: tokenizer, hashingTF, and lr.
     # tokenizer = Tokenizer(inputCol="text", outputCol="words")
