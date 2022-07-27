@@ -13,7 +13,7 @@ app = dash.Dash(
 )
 
 predictions = {"Tesla": +0.5, "Bitcoin": -0.3, "Dogecoin": -0.2}
-colors = ("green", "darkorange", "blue")
+colors = ("green", "darkorange", "blue") # blue for zero maybe?
 
 app.layout = dbc.Container(
     dbc.Row(
@@ -29,7 +29,7 @@ app.layout = dbc.Container(
                         html.H2('Latest tweet by Elon Musk', className='card-title'),
                         html.P('and how we predict it will change stocks & crypto', className='card-subtitle'),
                         html.Br(),
-                        html.P('This is the most recent Tweet by @ElonMusk. Probably contains lots some arrogance & money 🤑', className='card-text'),
+                        html.P('This is the most recent Tweet by @ElonMusk. Probably contains lots of arrogance & money 🤑', className='card-text'),
                         html.B('Predictions:', className='card-text'),
                         html.P(f"Tesla: {predictions['Tesla']}" , className='card-text', style={'color': colors[0] if predictions['Tesla'] > 0 else colors[1]}),
                         html.P(f"Bitcoin: {predictions['Bitcoin']}" , className='card-text', style={'color': colors[0] if predictions['Bitcoin'] > 0 else colors[1]}),
