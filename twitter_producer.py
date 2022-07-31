@@ -4,6 +4,8 @@ from datetime import datetime
 import twitter_data
 from kafka import KafkaProducer
 import kafkaCustomProducer
+from time import sleep
+
 #from setup_logger import fetch_log 
 
 # Kafka Producer
@@ -33,5 +35,6 @@ if __name__ == '__main__':
     #     producer.send('pizza', tweet.to_repr())
     #     # Sleep for 3 seconds
     #     time.sleep(3)
+
 
         
