@@ -17,10 +17,19 @@ activate
 echo "Installing packages from requirements"
 pip install -r requirements.txt
 
-
-echo "imma don"
-
-
 # to save current python packages use pip freeze > requirements.txt
 
-python market_producer.py
+echo "Requirement installed in virtual environment"
+
+docker-compose up -d
+
+echo "docker-compose executed"
+
+python market_producer.py &
+python twitter_producer.py &
+
+echo "waiting for data in the queue (120s)"
+sleep 120
+
+echo "executing predictive model"
+python model_one_test.py

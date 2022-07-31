@@ -4,6 +4,7 @@ from Market import MarketType, Trend
 from config.setup_logger import producer_log
 from dotenv import load_dotenv
 import os
+import time
 load_dotenv(".env")
 
 producer_log.info("New execution launched!")
@@ -26,15 +27,17 @@ init_sources = {
 
 
 if __name__ == '__main__':
+    break_time = 10 * 60
+    print("market_producer executed")
 
-    print("horray")
+    while True:
+        alphaCluster = FetcherClusterFactory.create("AlphaVantage", init_sources)
+        markets =  alphaCluster.fetch_all()
 
-    alphaCluster = FetcherClusterFactory.create("AlphaVantage", init_sources)
+        for market_name, market_obj in markets.items():
+            producer_log.debug(f"First trend in the market \"{market_name}\": {market_obj.trend_list[0].to_repr()}")
 
-    markets =  alphaCluster.fetch_all()
+            kafkaCustomProducer.write_unique(topic = market_name, read_partition = 0, list_elem = market_obj.trend_list, list_elem_type = Trend )
 
-
-    for market_name, market_obj in markets.items():
-        producer_log.debug(f"First trend in the market \"{market_name}\": {market_obj.trend_list[0].to_repr()}")
-
-        kafkaCustomProducer.write_unique(topic = market_name, read_partition = 0, list_elem = market_obj.trend_list, list_elem_type = Trend )
+        print(f"market_fetcher: sleeping for {break_time} seconds")
+        time.sleep( break_time )

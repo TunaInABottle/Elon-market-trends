@@ -135,14 +135,14 @@ if __name__ == '__main__':
     last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
     sleep_time = 30 * 60 # 30 minutes
     while True:
-        print("Model ready to execute")
+        print("model_one: Model ready to execute")
         if last_tweet != last_message_in_topic(TopicPartition("TWEETS", 0)):
             print("New tweet! Computing prediction...")
             predictions = predict()
             print(predictions)
             last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
         else:
-            print("No new tweet detected")
+            print("model_one: No new tweet detected")
         print(f"Returning to sleep for {sleep_time} seconds")
         sleep( sleep_time )
     
