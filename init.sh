@@ -32,4 +32,4 @@ echo "waiting for data in the queue (120s)"
 sleep 120
 
 echo "executing predictive model"
-python model_one_test.py
+python model_one.py

@@ -13,7 +13,17 @@ from pyspark.sql.types import TimestampType
 import pyspark.sql.functions as F
 
 def market_fluctuation(mrk_data: dataframe.DataFrame, date_time: datetime, t_interval: int, offset: int = 0) -> float: # t_interval in hours, offset in minutes
-    
+    """calculate the maximum fluctuation of market data
+
+    Args:
+        mrk_data: from which market dataset calculate the fluctuation.
+        date_time: from which date the fluctuation should be calculated.
+        t_interval: which time-window consider for the fluctuation (in hours).
+        offset (optional): time to be added to 'date_time' (in minutes), default 0.
+
+    Returns:
+        The maximum fluctuation in the market, if the dataset has no entry, 0 is returned instead.
+    """
     filt_mrk = mrk_data.filter(
         F.col("datetime").between(
             date_time + F.expr(f"+ interval {offset} minutes"), #from
@@ -35,8 +45,15 @@ def market_fluctuation(mrk_data: dataframe.DataFrame, date_time: datetime, t_int
         return variation2
 
 def get_spark_market_data(sparksession: SparkSession, mkt_name: str, hours_ago: int) -> dataframe.DataFrame:
-    """
-    TODO
+    """Writes a market in the specified Spark session.
+
+    Args:
+        sparksession: a Spark Session.
+        mkt_name: the name of the market in Kafka's queue.
+        hours_ago: how back should the reading go into the past.
+
+    Returns:
+        a dataframe with the specified market data written in the Spark Session. 
     """
     dataf = read_queue_by_ts(mkt_name, 0, hours_ago * HOUR_IN_MILLISEC )    
     s_market = sparksession.createDataFrame([(value['datetime'], value['open'], value['high'], value['low'], value['close'], value['volume']) for value in dataf[:-1]], ['datetime', 'open', 'high', 'low', 'close', 'volume'])
@@ -52,8 +69,14 @@ def get_spark_market_data(sparksession: SparkSession, mkt_name: str, hours_ago: 
     return s_market
 
 def get_spark_tweet_data(sparksession: SparkSession, hours_ago: int) -> dataframe.DataFrame: 
-    """
-    TODO
+    """Makes a tweet dataframe in a Spark session, preparing it for the model training.
+
+    Args:
+        sparksession: a Spark Session.
+        hours_ago: how back should the reading go into the past.
+
+    Returns:
+        a dataframe from TWEETS Kafka queue written in 'sparksession'.
     """
     data = reversed(read_queue_by_ts('TWEETS', 0, hours_ago * HOUR_IN_MILLISEC )) # reverse is used so that dates are written decrescently
 
@@ -67,8 +90,14 @@ def get_spark_tweet_data(sparksession: SparkSession, hours_ago: int) -> datafram
     return s_tweet
 
 def spark_tweet_list(sparksession: SparkSession, data: List[str]) -> dataframe.DataFrame:
-    """
-    TODO
+    """Writes a list of tweets into a spark session.
+
+    Args:
+        sparksession: a Spark Session.
+        data: a list of JSON object, representing a tweet.
+
+    Returns:
+        a dataframe with tweets written in 'sparksession'. 
     """
     s_tweet = sparksession.createDataFrame([(value['id'], value['datetime'], value['text'], value['retweets']) for value in data],
                                            ['id', 'datetime', 'text', 'retweets'])
@@ -83,6 +112,17 @@ def spark_tweet_list(sparksession: SparkSession, data: List[str]) -> dataframe.D
     return s_tweet
 
 def predict_market_by_last_tweet(spark: SparkSession, s_tweet: dataframe.DataFrame, s_market: dataframe.DataFrame, market_col_name: str) -> float:
+    """Makes a prediction for the fluctuation expected from the last tweet.
+
+    Args:
+        spark: a Spark Session.
+        s_tweet: Spark dataframe with tweets.
+        s_market: Spark dataframe with market trends.
+        market_col_name: the name to assign to the column with the predictions. TODO pointless as it is used now
+
+    Returns:
+        The expected fluctuation based on the last tweet.
+    """
     mkt_fluctuation = []
 
     # calculate for each entry the corresponding market variation
