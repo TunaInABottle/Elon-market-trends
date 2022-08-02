@@ -6,6 +6,7 @@ import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
 import model_one
+from time import sleep
 from kafkaCustomProducer import last_message_in_topic, TopicPartition
 app = dash.Dash(
     __name__,
@@ -41,9 +42,9 @@ app.layout = dbc.Container(
                         )),
                         html.Br(),
                         html.H3('Predictions:', className='card-title'),
-                        html.P(f"Tesla: {predictions['stock_tsla']}" , className='card-text', style={'color': colors[0] if predictions['stock_tsla'] > 0 else colors[1] if predictions['stock_tsla'] < 0 else colors[2]}),
-                        html.P(f"Bitcoin: {predictions['crypto_btc']}" , className='card-text', style={'color': colors[0] if predictions['crypto_btc'] > 0 else colors[1] if predictions['crypto_btc'] < 0 else colors[2]}),
-                        html.P(f"Dogecoin: {predictions['crypto_doge']}" , className='card-text', style={'color': colors[0] if predictions['crypto_doge'] > 0 else colors[1] if predictions['crypto_doge'] < 0 else colors[2]}),
+                        html.P(f"Tesla: {round(predictions['stock_tsla'],3)}" , className='card-text', style={'color': colors[0] if predictions['stock_tsla'] > 0 else colors[1] if predictions['stock_tsla'] < 0 else colors[2]}),
+                        html.P(f"Bitcoin: {round(predictions['crypto_btc'],3)}" , className='card-text', style={'color': colors[0] if predictions['crypto_btc'] > 0 else colors[1] if predictions['crypto_btc'] < 0 else colors[2]}),
+                        html.P(f"Dogecoin: {round(predictions['crypto_doge'], 3)}" , className='card-text', style={'color': colors[0] if predictions['crypto_doge'] > 0 else colors[1] if predictions['crypto_doge'] < 0 else colors[2]}),
 
 
                     ]
@@ -70,4 +71,17 @@ app.layout = dbc.Container(
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+    last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
+    sleep_time = 30 * 60 # 30 minutes
+    while True:
+        print("model_one: Model ready to execute")
+        if last_tweet != last_message_in_topic(TopicPartition("TWEETS", 0)):
+            print("New tweet! Computing prediction...")
+            predictions = model_one.predict()
+            print(predictions)
+            last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
+        else:
+            print("model_one: No new tweet detected")
+        print(f"Returning to sleep for {sleep_time} seconds")
+        sleep( sleep_time )
 
