@@ -9,10 +9,10 @@ from time import sleep
 #from setup_logger import fetch_log 
 
 # Kafka Producer
-producer = KafkaProducer(
-    bootstrap_servers = ['localhost:9092'],
-    value_serializer = lambda x: json.dumps(x).encode('utf-8')
-)
+# producer = KafkaProducer(
+#     bootstrap_servers = ['localhost:9092'],
+#     value_serializer = lambda x: json.dumps(x).encode('utf-8')
+# )
 
 twitterFetcher = twitter_data.TwitterFetcher()
 given_id = 44196397 #Elon Musk

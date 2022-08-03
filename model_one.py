@@ -1,5 +1,6 @@
 
 import datetime
+from datetime import datetime
 from time import sleep
 from typing import List
 #from config.setup_logger import consumer_log 
@@ -164,6 +165,43 @@ def predict():
         s_market = get_spark_market_data(spark, market, hour_offset) 
 
         market_fluct_dict[market_col_name] = predict_market_by_last_tweet(spark, s_tweet, s_market, market_col_name )
+
+    return market_fluct_dict
+
+def fake_predict(faketext: str):
+    spark = SparkSession \
+        .builder \
+        .appName("SparkModel_one") \
+        .config("spark.executor.memory", "8g") \
+        .config('spark.sql.session.timeZone', 'UTC') \
+        .getOrCreate() 
+
+    hour_offset = 3 * 24 # 3 days
+    markets = ["CRYPTO_BTC", "CRYPTO_DOGE", "STOCK_TSLA"]
+
+    s_tweet_fake = spark.createDataFrame([(0, datetime.now(), faketext, 0), (1, datetime.now(), "I love Tesla!!!", 0)], ['id', 'datetime', 'text', 'retweets'])
+    
+    # convert datetime type from string to datetime
+    s_tweet_fake = s_tweet_fake.withColumn("datetime", 
+                                  s_tweet_fake["datetime"]
+                                  .cast( TimestampType() )
+                    ).withColumn("row_idx",
+                                 F.monotonically_increasing_id() 
+                    )#.sort(s_tweet["id"].desc()) # not like arranging dates? You sus
+    # processing for the model
+    tokenizer = Tokenizer(inputCol="text", outputCol="words")
+    s_tweet_fake = tokenizer.transform(s_tweet_fake)
+    hashingTF = HashingTF(inputCol="words", outputCol="features").setNumFeatures(150)
+    s_tweet_fake = hashingTF.transform(s_tweet_fake)
+
+    market_fluct_dict = {}
+    for market in markets:
+        #consumer_log.info("computing {market_name} variation according to tweets")
+
+        market_col_name = market.lower()
+        s_market = get_spark_market_data(spark, market, hour_offset) 
+
+        market_fluct_dict[market_col_name] = predict_market_by_last_tweet(spark, s_tweet_fake, s_market, market_col_name )
 
     return market_fluct_dict
 

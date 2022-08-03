@@ -2,6 +2,7 @@
 # visit http://127.0.0.1:8050/ in your web browser.
 import dash
 from dash import Dash, html, dcc
+from dash.dependencies import Input, Output, State
 import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
@@ -19,7 +20,9 @@ print("New tweet! Computing prediction...")
 predictions = model_one.predict()
 print(predictions)
 
-colors = ("green", "darkorange", "blue") # green for positive, red for negative, blue for neutral
+sleep(30)
+
+colors = ("green", "darkorange", "blue") # colorcoded: green for positive, red for negative, blue for neutral
 
 app.layout = dbc.Container(
     dbc.Row(
@@ -58,21 +61,34 @@ app.layout = dbc.Container(
                         html.H2('What if you could influence markets? (optional if easy)', className='card-title'),
                         html.P('Our predictions if your text would be a Tweet by Elon Musk', className='card-subtitle'),
                         html.Br(),
-                        html.Textarea('I WANT TO BUY MORE BITCOIN cause im richer than you loosers 🤑', className='card-textarea'),
+                        dcc.Textarea(id='faketweet', value='Textarea content initialized\nwith multiple lines of text', style={'width': '70%', 'height': 100},),
                         html.Br(),
-                        dbc.Button("Predict", color="primary"),
+                        dbc.Button("Predict", color="primary", id='faketweet-button', n_clicks=0),
+                        html.Div(id='output', style={'whiteSpace': 'pre-line'})
                     ]
                 )
-            ])
+            ], style= {'backgroundColor':'#f5f5f5'}),
         ]),
         justify='center',
     ),
 )
 
+@app.callback(
+    Output('output', 'children'),
+    Input('faketweet-button', 'n_clicks'),
+    State('faketweet', 'value')
+)
+def predict_fake_tweet(n_clicks, faketweet):
+    if n_clicks > 0:
+        print(f"Fake tweet! Computing prediction...")
+        fake_predictions = model_one.fake_predict(faketweet)
+        print(fake_predictions)
+        return(f"Tesla: {round(fake_predictions['stock_tsla'],3)}, Bitcoin: {round(fake_predictions['crypto_btc'],3)}, Dogecoin: {round(predictions['crypto_doge'], 3)}")
+
 if __name__ == '__main__':
     app.run_server(debug=True)
     last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
-    sleep_time = 30 * 60 # 30 minutes
+    sleep_time = 1 * 60 # 30 minutes
     while True:
         print("model_one: Model ready to execute")
         if last_tweet != last_message_in_topic(TopicPartition("TWEETS", 0)):
@@ -84,4 +100,5 @@ if __name__ == '__main__':
             print("model_one: No new tweet detected")
         print(f"Returning to sleep for {sleep_time} seconds")
         sleep( sleep_time )
+        predictions = predictions = {"crypto_btc": 0, "crypto_doge": 0, "stock_tsla": 0}
 

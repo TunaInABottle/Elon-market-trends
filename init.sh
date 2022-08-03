@@ -25,6 +25,8 @@ docker-compose up -d
 
 echo "docker-compose executed"
 
+sleep 60
+
 python market_producer.py &
 python twitter_producer.py &
 
@@ -32,4 +34,6 @@ echo "waiting for data in the queue (120s)"
 sleep 120
 
 echo "executing predictive model"
-python model_one.py
+
+python model_one.py &
+python app.py
