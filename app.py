@@ -34,8 +34,9 @@ app.layout = dbc.Container(
                 [
                 dbc.CardBody(
                     [
-                        html.H2('Latest tweet by Elon Musk', className='card-title'),
-                        html.P('and how we predict it will change stocks & crypto', className='card-subtitle'),
+                        html.H2("The impact of Elon Musk's Tweets", className='card-title'),
+                        html.P('and how we predict it will change market prices & cryptocurrency', className='card-subtitle'),
+                        html.P('This is a simple model that predicts the variation of the market prices based on the last tweet of Elon Musk:', className='card-text'),
                         html.Br(),
                         dbc.Card(
                             dbc.CardBody([
@@ -58,12 +59,14 @@ app.layout = dbc.Container(
                 [
                 dbc.CardBody(
                     [
-                        html.H2('What if you could influence markets? (optional if easy)', className='card-title'),
-                        html.P('Our predictions if your text would be a Tweet by Elon Musk', className='card-subtitle'),
+                        html.H2('What if you were Elon Musk?', className='card-title'),
+                        html.P('How would you use Twitter if one of your Tweets could change financial markets? Have a look at the predicted changes in stock markets if your text were tweeted by Elon Musk today.', 
+                        className='card-subtitle'),
                         html.Br(),
                         dcc.Textarea(id='faketweet', value='Textarea content initialized\nwith multiple lines of text', style={'width': '70%', 'height': 100},),
                         html.Br(),
                         dbc.Button("Predict", color="primary", id='faketweet-button', n_clicks=0),
+                        html.Br(),
                         html.Div(id='output', style={'whiteSpace': 'pre-line'})
                     ]
                 )
