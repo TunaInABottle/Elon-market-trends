@@ -22,7 +22,7 @@ print(predictions)
 
 sleep(30)
 
-colors = ("green", "darkorange", "blue") # colorcoded: green for positive, red for negative, blue for neutral
+colors = ("green", "orangeRed", "blue") # colorcoded: green for positive, red for negative, blue for neutral
 
 app.layout = dbc.Container(
     dbc.Row(
@@ -35,7 +35,7 @@ app.layout = dbc.Container(
                 dbc.CardBody(
                     [
                         html.H2("The impact of Elon Musk's Tweets", className='card-title'),
-                        html.P('and how we predict it will change market prices & cryptocurrency', className='card-subtitle'),
+                        html.P('How we predict they will change market prices & cryptocurrency', className='card-subtitle'),
                         html.P('This is a simple model that predicts the variation of the market prices based on the last tweet of Elon Musk:', className='card-text'),
                         html.Br(),
                         dbc.Card(
@@ -60,10 +60,10 @@ app.layout = dbc.Container(
                 dbc.CardBody(
                     [
                         html.H2('What if you were Elon Musk?', className='card-title'),
-                        html.P('How would you use Twitter if one of your Tweets could change financial markets? Have a look at the predicted changes in stock markets if your text were tweeted by Elon Musk today.', 
+                        html.P('How would you use Twitter if one of your Tweets could change financial markets? \n Have a look at the predicted changes in stock markets if your text were tweeted by Elon Musk today.', 
                         className='card-subtitle'),
                         html.Br(),
-                        dcc.Textarea(id='faketweet', value='Textarea content initialized\nwith multiple lines of text', style={'width': '70%', 'height': 100},),
+                        dcc.Textarea(id='faketweet', value='Type your influential tweet here\nand push the button', style={'width': '70%', 'height': 100},),
                         html.Br(),
                         dbc.Button("Predict", color="primary", id='faketweet-button', n_clicks=0),
                         html.Br(),
@@ -91,7 +91,7 @@ def predict_fake_tweet(n_clicks, faketweet):
 if __name__ == '__main__':
     app.run_server(debug=True)
     last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
-    sleep_time = 1 * 60 # 30 minutes
+    sleep_time = 30 * 60 # 30 minutes
     while True:
         print("model_one: Model ready to execute")
         if last_tweet != last_message_in_topic(TopicPartition("TWEETS", 0)):
@@ -102,6 +102,6 @@ if __name__ == '__main__':
         else:
             print("model_one: No new tweet detected")
         print(f"Returning to sleep for {sleep_time} seconds")
-        sleep( sleep_time )
         predictions = predictions = {"crypto_btc": 0, "crypto_doge": 0, "stock_tsla": 0}
+        sleep( sleep_time )
 

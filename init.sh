@@ -35,5 +35,5 @@ sleep 120
 
 echo "executing predictive model"
 
-python model_one.py &
+#python model_one.py &
 python app.py

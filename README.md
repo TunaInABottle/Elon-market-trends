@@ -12,14 +12,15 @@
 
 ## How to Run:
 
-### Setting up the virtual environment
-
-To install the requirements run this in terminal:
-`source init.sh`
-
 ### Setting up Kafka with docker
 
-(put quick tutorial here how to set up our kafka environment so that it can be replicated)
+- Install and open Docker Desktop (if not already installed)
+- Download the following Docker images for Kafka:
+    - https://hub.docker.com/r/wurstmeister/zookeeper/
+    - https://hub.docker.com/r/wurstmeister/kafka/ 
+    This can be done with the following commands: 
+    `docker pull wurstmeister/kafka`
+    `docker pull wurstmeister/zookeeper`
 
 ### Create a Twitter Developer Account
 
@@ -34,17 +35,16 @@ ACCESS_TOKEN = your_key
 ACCESS_TOKEN_SECRET = your_key
 ```
 
+### Get a API key for AlphaVantage
+
+follow the instructions here:
+https://www.alphavantage.co/support/#api-key 
+
 ### Run the code
 
-To run the code for testing, open the folder in VS Code, open a split Terminal and first run the consumer.py, then the producer.py file in the other window. You should see the producer producing messages (containing twitter Info) and the consumer receiving it.
+To install the requirements in a virtual environment and run the code, enter this in terminal/command line:
+`source init.sh`
 
+This will first start the Docker images, then fetch the market & Twitter data and after some waiting time starts the prediction model
 
-## google docs:
-
-https://docs.google.com/document/d/12WIlLMl_l3vX2dv1bb3ZnQXg9orOfPYFRbv1ARFO-7A/edit
-
-
-## write on paper
-
-- As it is a dummy example, for the kafka topics we set up replication factor and partition equal to 1. In case of a deployment, it might be worth considering better number  so to improve robustness
-- Currently the fetching in Kafka's topics is based on an estimation of Elon Musk's Tweets per day multiplied by the number of days the model deems relevant for the computation. If this system would run for longer, it would be possible to get messages based on Kafka's offset thanks to the call https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html#kafka.KafkaConsumer.offsets_for_times
+(we noticed that on some machines the docker containers need more time to start the first time, in that case starting them manually or running the command again might help)
