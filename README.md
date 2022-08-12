@@ -21,11 +21,16 @@
     This can be done with the following commands: 
     `docker pull wurstmeister/kafka`
     `docker pull wurstmeister/zookeeper`
+### Get a API key for AlphaVantage
+
+follow the instructions here:
+https://www.alphavantage.co/support/#api-key 
 
 ### Create a Twitter Developer Account
 
 Once you have your twitter API account, create a file `.env` and put your keys in there like so:
 (replace 'your_key' with your keys). This sets the API keys as environment variables.
+Add the Alphavantage Key to the `.env` file.
 
 ```bash
 API_KEY = your_key
@@ -33,12 +38,8 @@ API_KEY_SECRET = your_key
 BEARER_TOKEN = your_key
 ACCESS_TOKEN = your_key
 ACCESS_TOKEN_SECRET = your_key
+ALPHAVANTAGE_API_KEY = your_key
 ```
-
-### Get a API key for AlphaVantage
-
-follow the instructions here:
-https://www.alphavantage.co/support/#api-key 
 
 ### Run the code
 
