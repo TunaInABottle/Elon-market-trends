@@ -33,7 +33,7 @@ python twitter_producer.py &
 echo "waiting for data in the queue (120s)"
 sleep 120
 
-echo "executing predictive model"
+echo "executing predictive model & launching UI"
 
 #python model_one.py &
 python app.py

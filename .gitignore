@@ -1,13 +1,11 @@
 venv
 .env
-secretfile.py
 stockkey.txt
 digital_currency_list.csv
 __pycache__
 log
 .mypy_cache
 config/AlphaVantageKey.txt
-twitter_data_old.py
 sandbox*
 node_modules
 sparkconsumer.py

@@ -1,17 +1,16 @@
-#TRYING TO MAKE CLASSES WORK
 
 from curses import raw
 import os
 from MessageData import MessageData
 import tweepy
 from AbstractFetcher import Fetcher
-from config.setup_logger import fetch_log 
 from dotenv import load_dotenv
 load_dotenv(".env")
 import datetime
 import dateutil.parser as parser
 
 class Tweet(MessageData):
+    """Class for new tweets."""
     def __init__(self, id: str, datetime: datetime, text: str, retweets: int) -> None:
         self.id = id
         self.datetime = datetime#.isoformat()

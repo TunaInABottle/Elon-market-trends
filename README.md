@@ -46,5 +46,6 @@ To install the requirements in a virtual environment and run the code, enter thi
 `source init.sh`
 
 This will first start the Docker images, then fetch the market & Twitter data and after some waiting time starts the prediction model
+After this waiting time the webapp can be found on: http://127.0.0.1:8050/
 
 (we noticed that on some machines the docker containers need more time to start the first time, in that case starting them manually or running the command again might help)

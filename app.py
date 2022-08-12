@@ -1,5 +1,6 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
+
 import dash
 from dash import Dash, html, dcc
 from dash.dependencies import Input, Output, State
@@ -89,6 +90,7 @@ def predict_fake_tweet(n_clicks, faketweet):
         return(f"Tesla: {round(fake_predictions['stock_tsla'],3)}, Bitcoin: {round(fake_predictions['crypto_btc'],3)}, Dogecoin: {round(predictions['crypto_doge'], 3)}")
 
 if __name__ == '__main__':
+    # Loop checks for new Tweets every 30 minutes and if a new Tweet appears calculates new predictions and updates the website
     app.run_server(debug=True)
     last_tweet = last_message_in_topic(TopicPartition("TWEETS", 0))
     sleep_time = 30 * 60 # 30 minutes
@@ -102,6 +104,6 @@ if __name__ == '__main__':
         else:
             print("model_one: No new tweet detected")
         print(f"Returning to sleep for {sleep_time} seconds")
-        predictions = predictions = {"crypto_btc": 0, "crypto_doge": 0, "stock_tsla": 0}
+        #predictions = predictions = {"crypto_btc": 0, "crypto_doge": 0, "stock_tsla": 0}
         sleep( sleep_time )
 
